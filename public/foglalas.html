@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Online időpontfoglalás – Zöld Tara háza</title>
+  <meta name="description" content="Foglalj időpontot online." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+<body class="site-bg min-h-screen text-emerald-50">
+
+  <!-- SKELETON LOADER -->
+<div id="pageLoader" class="fixed inset-0 z-[9999] bg-emerald-950 flex items-center justify-center transition-opacity duration-500">
+
+  <div class="w-full max-w-4xl px-6 space-y-6 animate-pulse">
+
+    <div class="h-10 w-48 bg-emerald-800/50 rounded-xl"></div>
+
+    <div class="h-6 w-3/4 bg-emerald-800/40 rounded-lg"></div>
+    <div class="h-6 w-2/3 bg-emerald-800/40 rounded-lg"></div>
+
+    <div class="grid grid-cols-3 gap-4 mt-10">
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+    </div>
+
+  </div>
+</div>
+  
+
+  <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="flex items-center justify-between">
+  
+        <!-- LOGÓ balra -->
+        <a id="adminTriggerLogo" href="index.html" class="flex items-center">
+          <img
+            src="assets/img/logo.svg"
+            alt="Zöld Tara háza logó"
+            class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          />
+        </a>
+  
+
+          <!-- HAMBURGER (csak mobilon látszik) -->
+  <button id="mobileMenuBtn"
+    class="ml-auto md:hidden inline-flex items-center justify-center rounded-xl p-2 bg-emerald-300/10 ring-1 ring-emerald-200/20">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+        <!-- MENÜ KÖZÉPEN -->
+        <nav class="hidden justify-center gap-2 md:flex">
+  
+          <a data-page="index.html"
+             href="index.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- home -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Home
+          </a>
+  
+          <a data-page="bemutatkozas.html"
+             href="bemutatkozas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- user -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Bemutatkozás
+          </a>
+  
+          <a data-page="szolgaltatasok.html"
+             href="szolgaltatasok.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- grid -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Szolgáltatások
+          </a>
+  
+          <a data-page="arlista.html"
+             href="arlista.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- tag -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 13l-7 7-10-10V3h7l10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M7.5 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Árlista
+          </a>
+  
+          <a data-page="foglalas.html"
+             href="foglalas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M8 3v3M16 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Időpontfoglalás
+          </a>
+  
+          <a data-page="kapcsolat.html"
+             href="kapcsolat.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- mail -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Kapcsolat
+          </a>
+  
+  
+        </nav>
+  
+      </div>
+    </div>
+  </header>
+
+  <div id="mobileMenu"
+  class="md:hidden hidden border-b border-emerald-200/10 bg-emerald-950/95 backdrop-blur">
+
+  <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-emerald-50/90">
+    <a href="index.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Home</a>
+    <a href="bemutatkozas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Bemutatkozás</a>
+    <a href="szolgaltatasok.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Szolgáltatások</a>
+    <a href="arlista.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Árlista</a>
+    <a href="foglalas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Időpontfoglalás</a>
+    <a href="kapcsolat.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Kapcsolat</a>
+  </div>
+</div>
+
+      <!-- SUCCESS MODAL -->
+<div id="successModal"
+     class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+
+  <div class="w-full max-w-md rounded-3xl bg-emerald-950 border border-emerald-200/10 p-8 text-center shadow-2xl">
+
+    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-300/20 text-emerald-200 mb-4 text-xl">
+      ✓
+    </div>
+
+    <h3 class="text-xl font-semibold">Sikeres foglalás</h3>
+
+    <!-- IDE ÍRJA A JS A RÉSZLETEKET -->
+    <p id="successDetails"
+       class="mt-3 text-sm text-emerald-100/70 whitespace-pre-line">
+    </p>
+
+    <!-- GOOGLE CALENDAR LINK -->
+    <a id="googleCalendarLink"
+       target="_blank"
+       class="mt-4 hidden inline-block w-full rounded-2xl bg-emerald-300/10 px-5 py-3 text-sm font-semibold ring-1 ring-emerald-200/20 hover:bg-emerald-300/20 text-center">
+      Hozzáadás Google Naptárhoz
+    </a>
+
+    <button id="closeSuccessModal"
+            class="mt-6 w-full rounded-2xl bg-emerald-300/15 px-5 py-3 text-sm font-semibold ring-1 ring-emerald-200/20 hover:bg-emerald-300/20">
+      Rendben
+    </button>
+
+  </div>
+</div>
+
+  <main class="mx-auto max-w-6xl px-4 py-14">
+  <header class="max-w-3xl">
+    <h1 class="text-3xl font-semibold">Online időpontfoglalás</h1>
+    <p class="mt-3 text-emerald-100/75">
+      Válassz szolgáltatást, majd napot és idősávot. A foglalás regisztráció nélkül működik.
+    </p>
+  </header>
+
+  <!-- Layout -->
+  <div class="mt-10 grid gap-6 lg:grid-cols-12">
+    <!-- Left: steps -->
+    <section class="lg:col-span-7 space-y-6">
+      <!-- Step 1: Service -->
+      <div class="rounded-3xl border border-emerald-200/10 bg-emerald-950/50 p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-100/60">1. lépés</p>
+            <h2 class="mt-1 text-lg font-semibold">Szolgáltatás kiválasztása</h2>
+            <p class="mt-2 text-sm text-emerald-100/70">
+              A foglalható időpontok a választott szolgáltatás alapján jelennek meg.
+            </p>
+          </div>
+
+          <span class="inline-flex items-center rounded-2xl bg-emerald-300/10 px-3 py-1 text-xs ring-1 ring-emerald-200/15 text-emerald-100/80">
+            V1
+          </span>
+        </div>
+
+        <div class="mt-5">
+          <label for="serviceSelect" class="block text-sm text-emerald-100/80">Szolgáltatás</label>
+          <div class="mt-2 flex gap-3">
+            <select
+              id="serviceSelect"
+              class="w-full rounded-2xl border border-emerald-200/10 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-50 outline-none ring-0 transition focus:border-emerald-300/30 focus:ring-2 focus:ring-emerald-300/30"
+              aria-label="Szolgáltatás kiválasztása"
+            >
+              <option value="">Betöltés…</option>
+            </select>
+
+            <button
+              id="btnReloadServices"
+              type="button"
+              class="shrink-0 rounded-2xl bg-emerald-300/15 px-4 py-3 text-sm font-medium ring-1 ring-emerald-200/20 hover:bg-emerald-300/20 focus:outline-none focus:ring-2 focus:ring-emerald-300/30"
+              aria-label="Szolgáltatások újratöltése"
+              title="Újratöltés"
+            >
+              Frissít
+            </button>
+          </div>
+
+          <p id="serviceHint" class="mt-3 text-xs text-emerald-100/60"></p>
+        </div>
+      </div>
+
+      <!-- Step 2: Calendar -->
+      <div class="rounded-3xl border border-emerald-200/10 bg-emerald-950/50 p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-100/60">2. lépés</p>
+            <h2 class="mt-1 text-lg font-semibold">Nap kiválasztása</h2>
+            <p class="mt-2 text-sm text-emerald-100/70">
+              A hétvégék és ünnepnapok nem foglalhatók. A betelt napok szürkén jelennek meg.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5 flex items-center justify-between gap-3">
+          <button
+            id="btnPrevMonth"
+            type="button"
+            class="rounded-2xl bg-white/5 px-4 py-2 text-sm ring-1 ring-white/10 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-emerald-300/30"
+            aria-label="Előző hónap"
+          >
+            ← Előző
+          </button>
+
+          <div class="text-center">
+            <p id="monthLabel" class="text-sm font-semibold"></p>
+            <p class="mt-1 text-xs text-emerald-100/60">Csak a napok látszanak, időpontok nem.</p>
+          </div>
+
+          <button
+            id="btnNextMonth"
+            type="button"
+            class="rounded-2xl bg-white/5 px-4 py-2 text-sm ring-1 ring-white/10 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-emerald-300/30"
+            aria-label="Következő hónap"
+          >
+            Következő →
+          </button>
+        </div>
+
+        <div class="mt-5 grid grid-cols-7 gap-2 text-center text-xs text-emerald-100/60">
+          <div>H</div><div>K</div><div>Sze</div><div>Cs</div><div>P</div><div>Szo</div><div>V</div>
+        </div>
+
+        <div
+          id="calendarGrid"
+          class="mt-3 grid grid-cols-7 gap-2"
+          aria-label="Naptár"
+        >
+          <!-- JS tölti -->
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-3 text-xs text-emerald-100/70">
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-300/70"></span>Elérhető</span>
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-white/25"></span>Betelt</span>
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-rose-300/70"></span>Nem foglalható</span>
+        </div>
+
+        <p id="calendarHint" class="mt-3 text-xs text-emerald-100/60"></p>
+      </div>
+
+      <!-- Step 3: Slots -->
+      <div id="slotsCard" class="rounded-3xl border border-emerald-200/10 bg-emerald-950/50 p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-100/60">3. lépés</p>
+            <h2 class="mt-1 text-lg font-semibold">Idősáv kiválasztása</h2>
+            <p class="mt-2 text-sm text-emerald-100/70">
+              A rendszer automatikusan kiszámolja, mi szabad. Csak a szabad sávok kattinthatók.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <p class="text-sm text-emerald-100/80">
+            Kiválasztott nap: <span id="selectedDateLabel" class="font-semibold text-emerald-50">—</span>
+          </p>
+
+          <div id="slotsGrid" class="mt-4 grid gap-3 sm:grid-cols-2">
+            <!-- JS tölti -->
+          </div>
+
+          <p id="slotsHint" class="mt-3 text-xs text-emerald-100/60"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: form -->
+    <aside class="lg:col-span-5">
+      <div class="sticky top-24 rounded-3xl border border-emerald-200/10 bg-emerald-950/60 p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-100/60">4. lépés</p>
+            <h2 class="mt-1 text-lg font-semibold">Adatok megadása</h2>
+            <p class="mt-2 text-sm text-emerald-100/70">
+              A foglalás véglegesítéséhez add meg az adataidat.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+          <p class="text-xs text-emerald-100/70">Összefoglaló</p>
+          <div class="mt-2 space-y-1 text-sm">
+            <p>Szolgáltatás: <span id="summaryService" class="font-semibold text-emerald-50">—</span></p>
+            <p>Dátum: <span id="summaryDate" class="font-semibold text-emerald-50">—</span></p>
+            <p>Idősáv: <span id="summarySlot" class="font-semibold text-emerald-50">—</span></p>
+          </div>
+        </div>
+
+        <form id="bookingForm" class="mt-6 space-y-4" novalidate>
+        <div>
+          <label for="name" class="block text-sm text-emerald-100/80">Név *</label>
+          <input
+            id="name"
+            type="text"
+            class="mt-2 w-full rounded-2xl border border-emerald-200/10 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-50 outline-none transition focus:border-emerald-300/30 focus:ring-2 focus:ring-emerald-300/30"
+            placeholder="Teljes név"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <div>
+          <label for="phone" class="block text-sm text-emerald-100/80">Telefonszám *</label>
+          <input
+            id="phone"
+            type="tel"
+            inputmode="numeric"
+            class="mt-2 w-full rounded-2xl border border-emerald-200/10 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-50 outline-none transition focus:border-emerald-300/30 focus:ring-2 focus:ring-emerald-300/30"
+            placeholder="9–15 számjegy"
+            required
+            autocomplete="tel"
+          />
+          <p class="mt-2 text-xs text-emerald-100/60">Csak számok (pl. 36301234567).</p>
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm text-emerald-100/80">Email *</label>
+          <input
+            id="email"
+            type="email"
+            class="mt-2 w-full rounded-2xl border border-emerald-200/10 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-50 outline-none transition focus:border-emerald-300/30 focus:ring-2 focus:ring-emerald-300/30"
+            placeholder="email@pelda.hu"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div>
+          <label for="note" class="block text-sm text-emerald-100/80">Megjegyzés (opcionális)</label>
+          <textarea
+            id="note"
+            rows="4"
+            class="mt-2 w-full rounded-2xl border border-emerald-200/10 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-50 outline-none transition focus:border-emerald-300/30 focus:ring-2 focus:ring-emerald-300/30"
+            placeholder="Ha szeretnél, írhatsz pár sort…"
+          ></textarea>
+        </div>
+
+        <!-- ÁSZF CHECKBOX -->
+        <div class="flex items-start gap-3 mt-4">
+          <input
+            id="termsCheckbox"
+            type="checkbox"
+            class="mt-1 h-4 w-4 rounded border-emerald-300/40 bg-emerald-950 text-emerald-400 focus:ring-emerald-300/40"
+          />
+          <label for="termsCheckbox" class="text-sm text-emerald-100/80 leading-relaxed">
+            Elfogadom az Általános Szerződési Feltételeket.
+          </label>
+        </div>
+
+        <button
+          id="btnSubmit"
+          type="submit"
+          class="relative w-full rounded-2xl bg-emerald-300/15 px-5 py-3 text-sm font-semibold ring-1 ring-emerald-200/20 hover:bg-emerald-300/20 focus:outline-none focus:ring-2 focus:ring-emerald-300/30 disabled:opacity-40 disabled:hover:bg-emerald-300/15 flex items-center justify-center gap-2"
+          disabled
+        >
+          <span id="btnText">Foglalás véglegesítése</span>
+
+          <svg id="btnSpinner"
+            class="hidden h-4 w-4 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4">
+            </circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+            </path>
+          </svg>
+        </button>
+
+        <p id="formHint" class="text-xs text-emerald-100/60"></p>
+</form>
+
+        <div id="toast" class="mt-4 hidden rounded-2xl border border-white/10 bg-black/30 p-4 text-sm"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Script: a következő lépésben bekötjük a JS-t -->
+  <script src="assets/js/foglalas.js"></script>
+</main>
+
+  <script>
+  const logo = document.getElementById('adminTriggerLogo');
+
+  if (logo) {
+    logo.addEventListener('click', function (e) {
+      if (e.shiftKey) {
+        e.preventDefault();
+        window.location.href = "/admin-login.html";
+      }
+    });
+  }
+</script>
+
+
+  <script>
+    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('a[data-page]').forEach(a => {
+      const page = (a.getAttribute('data-page') || '').toLowerCase();
+      if (page === current) {
+        a.classList.add('opacity-60');
+        a.setAttribute('aria-current', 'page');
+      }
+    });
+  </script>
+  
+  <script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("pageLoader");
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("mobileMenuBtn");
+    const menu = document.getElementById("mobileMenu");
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+
+    // ha rákattintasz egy linkre, csukja be
+    menu.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => menu.classList.add("hidden"));
+    });
+  });
+</script>
+
+  <script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

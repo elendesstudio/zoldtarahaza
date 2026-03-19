@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Naptár – Zöld Tara háza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+<header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="assets/img/logo.svg" class="h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]" />
+      <div class="leading-tight">
+        <div class="text-sm text-emerald-50/70">Zöld Tara háza</div>
+        <div class="text-base font-semibold tracking-tight text-white">Admin • Naptár</div>
+      </div>
+    </a>
+
+    <div class="flex items-center gap-2">
+
+    <a href="/admin-bookings.html"
+    class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-sm">
+    Összes foglalás
+    </a>
+
+    <!-- 👇 EZT ADD HOZZÁ -->
+    <a href="/admin-services.html"
+    class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-sm">
+    Kezelések
+    </a>
+
+    <button onclick="logout()"
+    class="px-4 py-2 rounded-2xl bg-red-600 hover:bg-red-700 text-sm font-semibold">
+    Kilépés
+    </button>
+
+  </div>
+
+  </div>
+</header>                                                                                                           
+
+<main class="mx-auto max-w-6xl px-4 py-8">
+  <div class="grid gap-6 lg:grid-cols-12">
+
+    <!-- ===== LEFT: CALENDAR ===== -->
+    <section class="lg:col-span-7 rounded-3xl border border-white/10 bg-white/[0.04] p-6 ring-1 ring-white/5 backdrop-blur-sm">
+      <div class="flex items-center justify-between gap-3">
+        <button onclick="prevMonth()" class="px-4 py-2 bg-white/10 rounded-2xl hover:bg-white/15">←</button>
+        <div id="monthLabel" class="text-lg font-semibold"></div>
+        <button onclick="nextMonth()" class="px-4 py-2 bg-white/10 rounded-2xl hover:bg-white/15">→</button>
+      </div>
+
+      <div class="mt-5 grid grid-cols-7 gap-2 text-center text-xs text-white/60">
+        <div>H</div><div>K</div><div>Sze</div><div>Cs</div><div>P</div><div>Szo</div><div>V</div>
+      </div>
+
+      <div id="calendarGrid" class="mt-2 grid grid-cols-7 gap-2"></div>
+
+      <div class="mt-5 grid gap-2 text-xs text-white/65">
+        <div class="flex items-center gap-2"><span class="h-3 w-3 rounded bg-red-600/50 border border-red-500"></span> Hétvége / Ünnepnap (nem foglalható)</div>
+        <div class="flex items-center gap-2"><span class="h-3 w-3 rounded bg-emerald-600/40 border border-emerald-500"></span> Szabad nap</div>
+        <div class="flex items-center gap-2"><span class="h-3 w-3 rounded bg-blue-800/60 border border-blue-600"></span> Van foglalás</div>
+        <div class="flex items-center gap-2"><span class="h-3 w-3 rounded bg-orange-500/50 border border-orange-400"></span> Admin tiltás (nap)</div>
+        <div class="flex items-center gap-2"><span class="h-3 w-3 rounded bg-slate-700/60 border border-slate-600"></span> Múlt nap (visszanézhető)</div>
+      </div>
+    </section>
+
+    <!-- ===== RIGHT: DAY PANEL ===== -->
+    <section class="lg:col-span-5 rounded-3xl border border-white/10 bg-white/[0.04] p-6 ring-1 ring-white/5 backdrop-blur-sm">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-sm text-white/60">Kiválasztott nap</div>
+          <h2 id="dayTitle" class="mt-1 text-2xl font-semibold">—</h2>
+          <div id="dayBadges" class="mt-2 flex flex-wrap gap-2"></div>
+        </div>
+        <button onclick="jumpToday()" class="px-3 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-sm">Ma</button>
+      </div>
+
+      <div class="mt-6 border-t border-white/10 pt-5">
+        <div class="flex items-center justify-between">
+          <div class="text-sm font-semibold">Nap tiltás</div>
+          <label class="inline-flex items-center gap-2 text-sm text-white/75">
+            <input id="chkDayBlocked" type="checkbox" class="scale-110" onchange="onToggleDayBlocked(this.checked)">
+            <span>Admin tiltás</span>
+          </label>
+        </div>
+        <p class="mt-2 text-xs text-white/60">
+          Bekapcsolva: az egész nap azonnal nem foglalható.
+        </p>
+      </div>
+
+      <div class="mt-6 border-t border-white/10 pt-5">
+        <div class="text-sm font-semibold">Idősávok (autosave)</div>
+        <p class="mt-1 text-xs text-white/60">
+          Foglalt idősáv automatikusan zárolt (nem kapcsolható).
+        </p>
+        <div id="slotsBox" class="mt-3 space-y-2"></div>
+      </div>
+
+      <div class="mt-6 border-t border-white/10 pt-5">
+        <div class="text-sm font-semibold">Foglalások (részletes)</div>
+        <div id="bookingsBox" class="mt-3 space-y-2"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  // =========================================================
+  // ✅ DÁTUM KEZELÉS: NINCS UTC CSÚSZÁS
+  // =========================================================
+  function parseLocalDate(dateStr) {
+    // dateStr: YYYY-MM-DD
+    const [y, m, d] = String(dateStr).split("-").map(Number);
+    return new Date(y, m - 1, d); // helyi dátum, nem UTC
+  }
+
+  function toISODateLocal(dt) {
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth() + 1).padStart(2, "0");
+    const d = String(dt.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function monthKey(dt) {
+    return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  function isWeekendLocal(dateStr) {
+    const dow = parseLocalDate(dateStr).getDay(); // 0 vas, 6 szo
+    return dow === 0 || dow === 6;
+  }
+
+  function isPastDateStr(dateStr) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const d = parseLocalDate(dateStr);
+    d.setHours(0, 0, 0, 0);
+    return d < today;
+  }
+
+  // =========================================================
+  // HOLIDAYS (fix lista)
+  // =========================================================
+  const HUNGARIAN_HOLIDAYS = [
+    "01-01","03-15","05-01","08-20","10-23","11-01","12-25","12-26"
+  ];
+
+  function isHolidayLocal(dateStr) {
+    const d = parseLocalDate(dateStr);
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return HUNGARIAN_HOLIDAYS.includes(`${mm}-${dd}`);
+  }
+
+  // =========================================================
+  // STATE
+  // =========================================================
+  let TIME_SLOTS = [];
+  let currentDate = new Date();             // hónap navigációhoz
+  let blockedDays = new Set();              // admin day-block
+  let monthBookingsMap = {};                // {date: [slot,slot]}
+  let selectedDateStr = null;
+  let daySlotOverrides = new Map();         // Map(slot -> enabled 0/1)
+  let dayBookingsDetailed = [];             // detailed bookings for selected date
+
+  // =========================================================
+  // AUTH
+  // =========================================================
+  async function checkAdmin(){
+    const r = await fetch("/admin/check");
+    const d = await r.json();
+    if(!d.loggedIn) location.href="/admin-login.html";
+  }
+  async function logout(){
+    await fetch("/admin/logout");
+    location.href="/admin-login.html";
+  }
+
+  // =========================================================
+  // LOADERS
+  // =========================================================
+  async function loadTimeSlots(){
+    const r = await fetch("/api/time-slots");
+    TIME_SLOTS = await r.json();
+  }
+
+  async function loadBlockedDays(){
+    const r = await fetch("/api/admin/blocked-days");
+    blockedDays = new Set(await r.json());
+  }
+
+  async function loadMonthBookingsSummary(){
+    const key = monthKey(currentDate);
+    const r = await fetch(`/api/admin/bookings?month=${key}`);
+    monthBookingsMap = await r.json(); // {date: [slot,...]}
+  }
+
+  async function loadDayBookingsDetailed(dateStr){
+    const r = await fetch(`/api/admin/bookings?date=${dateStr}`);
+    dayBookingsDetailed = await r.json();
+  }
+
+  async function loadDaySlotOverrides(dateStr){
+    const r = await fetch(`/api/admin/daily-slots/${dateStr}`);
+    const data = await r.json();
+    daySlotOverrides = new Map(data.map(x => [x.slot, Number(x.enabled)]));
+  }
+
+  // =========================================================
+  // CALENDAR RENDER
+  // =========================================================
+  function renderCalendar(){
+    const grid = document.getElementById("calendarGrid");
+    grid.innerHTML = "";
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    document.getElementById("monthLabel").textContent =
+      currentDate.toLocaleString("hu-HU", { month:"long", year:"numeric" });
+
+    // hónap első napja
+    const first = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Monday=0 beállítás a gridhez
+    const start = (first.getDay() + 6) % 7;
+
+    for(let i=0; i<start; i++){
+      grid.appendChild(document.createElement("div"));
+    }
+
+    for(let day=1; day<=daysInMonth; day++){
+      const d = new Date(year, month, day);
+      const dateStr = toISODateLocal(d); // ✅ LOCAL dateStr
+
+      const hasBooking = Array.isArray(monthBookingsMap[dateStr]) && monthBookingsMap[dateStr].length > 0;
+      const isBlocked = blockedDays.has(dateStr);
+      const holidayOrWeekend = isHolidayLocal(dateStr) || isWeekendLocal(dateStr);
+      const past = isPastDateStr(dateStr);
+
+      // COLOR RULES (priority):
+      // red: weekend/holiday
+      // orange: admin blocked
+      // dark blue: has booking
+      // green: free
+      // past: gray
+      let base = "rounded-2xl border px-2 py-2 text-left cursor-pointer select-none transition";
+      let bg = "";
+
+      if (holidayOrWeekend) bg = "bg-red-600/35 border-red-500";
+      else if (isBlocked) bg = "bg-orange-500/35 border-orange-400";
+      else if (hasBooking) bg = "bg-blue-900/55 border-blue-600";
+      else bg = "bg-emerald-600/30 border-emerald-500";
+
+      if (past) bg = "bg-slate-800/60 border-slate-600 opacity-85";
+
+      const cell = document.createElement("button");
+      cell.type = "button";
+      cell.className = `${base} ${bg} hover:opacity-90`;
+      cell.setAttribute("data-date", dateStr);
+
+      if (selectedDateStr === dateStr) {
+        cell.classList.add("ring-2","ring-teal-300/70");
+      }
+
+      const label = document.createElement("div");
+      label.className = "text-base font-semibold leading-none";
+      label.textContent = String(day);
+
+      const sub = document.createElement("div");
+      sub.className = "mt-1 text-[11px] leading-snug text-white/80 min-h-[28px]";
+
+      if (hasBooking) {
+        const slots = monthBookingsMap[dateStr].slice(0,3).join(", ");
+        const more = monthBookingsMap[dateStr].length > 3 ? ` +${monthBookingsMap[dateStr].length-3}` : "";
+        sub.textContent = `Foglalás: ${slots}${more}`;
+      } else if (holidayOrWeekend) {
+        sub.textContent = "Nem foglalható";
+      } else if (isBlocked) {
+        sub.textContent = "Admin tiltás";
+      } else {
+        sub.textContent = "Szabad";
+      }
+
+      cell.appendChild(label);
+      cell.appendChild(sub);
+
+      cell.addEventListener("click", () => selectDay(dateStr));
+      grid.appendChild(cell);
+    }
+  }
+
+  // =========================================================
+  // RIGHT PANEL
+  // =========================================================
+  function setBadges(){
+    const badges = document.getElementById("dayBadges");
+    badges.innerHTML = "";
+
+    const mk = (txt, cls) => {
+      const b = document.createElement("span");
+      b.className = `inline-flex items-center rounded-full px-3 py-1 text-xs ring-1 ${cls}`;
+      b.textContent = txt;
+      badges.appendChild(b);
+    };
+
+    if (!selectedDateStr) return;
+
+    const isB = blockedDays.has(selectedDateStr);
+    const hW = isHolidayLocal(selectedDateStr) || isWeekendLocal(selectedDateStr);
+    const past = isPastDateStr(selectedDateStr);
+    const hasB = (dayBookingsDetailed?.length || 0) > 0;
+
+    if (past) mk("Múlt nap", "bg-slate-800/60 ring-slate-500/40 text-white/85");
+    if (hW) mk("Hétvége / Ünnepnap", "bg-red-600/30 ring-red-500/30 text-white/90");
+    if (isB) mk("Admin tiltás", "bg-orange-500/30 ring-orange-400/30 text-white/90");
+    if (hasB) mk(`${dayBookingsDetailed.length} foglalás`, "bg-blue-900/40 ring-blue-500/30 text-white/90");
+
+    if (!past && !hW && !isB && !hasB) mk("Szabad", "bg-emerald-600/25 ring-emerald-400/25 text-white/90");
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "").replace(/[&<>"']/g, (m) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function renderBookingsBox(){
+    const box = document.getElementById("bookingsBox");
+    box.innerHTML = "";
+
+    if (!selectedDateStr) {
+      box.innerHTML = `<div class="text-sm text-white/60">Válassz egy napot a naptárban.</div>`;
+      return;
+    }
+
+    if (!Array.isArray(dayBookingsDetailed) || dayBookingsDetailed.length === 0) {
+      box.innerHTML = `<div class="text-sm text-white/60">Erre a napra nincs foglalás.</div>`;
+      return;
+    }
+
+    dayBookingsDetailed.forEach(b => {
+      const card = document.createElement("div");
+      card.className = "rounded-2xl border border-white/10 bg-white/[0.04] p-3";
+
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-sm font-semibold">${escapeHtml(b.slot)} • ${escapeHtml(b.name || "-")}</div>
+            <div class="mt-1 text-xs text-white/70">${escapeHtml(b.service_name || "")}</div>
+            <div class="mt-2 text-xs text-white/70">
+              <div>Tel: <span class="text-white/90">${escapeHtml(b.phone || "-")}</span></div>
+              <div>Email: <span class="text-white/90">${escapeHtml(b.email || "-")}</span></div>
+            </div>
+            <div class="mt-2 text-xs text-white/60">${escapeHtml(b.note || "")}</div>
+          </div>
+          <button class="shrink-0 rounded-xl bg-red-600 px-3 py-2 text-xs font-semibold hover:bg-red-700"
+                  onclick="deleteBookingFromPanel(${b.id})">
+            Törlés
+          </button>
+        </div>
+      `;
+      box.appendChild(card);
+    });
+  }
+
+  async function deleteBookingFromPanel(id){
+    if(!confirm("Biztos törlöd ezt a foglalást?")) return;
+    await fetch(`/api/admin/bookings/${id}`, { method:"DELETE" });
+    await refreshSelectedDay();
+    await refreshMonth();
+  }
+
+  function renderSlotsBox(){
+    const box = document.getElementById("slotsBox");
+    box.innerHTML = "";
+
+    if (!selectedDateStr) {
+      box.innerHTML = `<div class="text-sm text-white/60">Válassz egy napot a naptárban.</div>`;
+      return;
+    }
+
+    const holidayOrWeekend = isHolidayLocal(selectedDateStr) || isWeekendLocal(selectedDateStr);
+    const past = isPastDateStr(selectedDateStr);
+
+    // foglalt slotok:
+    const booked = new Set((monthBookingsMap[selectedDateStr] || []));
+
+    const dayBlocked = blockedDays.has(selectedDateStr);
+
+    TIME_SLOTS.forEach(slot => {
+      // default: enabled
+      let enabled = daySlotOverrides.has(slot) ? (daySlotOverrides.get(slot) === 1) : true;
+
+      const isBooked = booked.has(slot);
+
+      // szabályok:
+      // - múlt / hétvége / ünnep: view oké, de ne szerkeszd
+      // - admin day blocked: ne szerkeszd, mert aznap úgysem foglalható
+      // - foglalt slot: ne szerkeszd
+      const lockedByRule = holidayOrWeekend || past;
+      const disabled = lockedByRule || isBooked || dayBlocked;
+
+      const row = document.createElement("label");
+      row.className =
+        `flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm ` +
+        (disabled ? "opacity-70" : "hover:bg-white/[0.06]");
+
+      row.innerHTML = `
+        <div class="min-w-0">
+          <div class="font-semibold">${escapeHtml(slot)}</div>
+          <div class="text-xs text-white/60">
+            ${isBooked ? "Foglalt" : (lockedByRule ? "Nem foglalható" : (dayBlocked ? "Nap tiltva" : "Szerkeszthető"))}
+          </div>
+        </div>
+        <input type="checkbox" class="scale-110"
+          ${enabled ? "checked" : ""}
+          ${disabled ? "disabled" : ""}>
+      `;
+
+      const input = row.querySelector("input");
+      input.addEventListener("change", async () => {
+        enabled = input.checked;
+        daySlotOverrides.set(slot, enabled ? 1 : 0);
+        await saveDaySlotsAutosave();
+        // azonnali sync: újrarender, hogy konzisztens legyen
+        await refreshMonth();
+        await refreshSelectedDay();
+      });
+
+      box.appendChild(row);
+    });
+  }
+
+  async function saveDaySlotsAutosave(){
+    const payload = TIME_SLOTS.map(slot => ({
+      slot,
+      enabled: (daySlotOverrides.has(slot) ? (daySlotOverrides.get(slot) === 1) : true)
+    }));
+
+    await fetch("/api/admin/daily-slots",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ date: selectedDateStr, slots: payload })
+    });
+  }
+
+  async function onToggleDayBlocked(checked){
+    if (!selectedDateStr) return;
+
+    await fetch("/api/admin/blocked-days",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ date: selectedDateStr, blocked: checked })
+    });
+
+    await loadBlockedDays();
+    renderCalendar();
+    renderSlotsBox();
+    setBadges();
+  }
+
+  // =========================================================
+  // SELECT DAY
+  // =========================================================
+  async function selectDay(dateStr){
+    selectedDateStr = dateStr;
+    await refreshSelectedDay();
+    renderCalendar();
+  }
+
+  async function refreshSelectedDay(){
+    if (!selectedDateStr) return;
+
+    document.getElementById("dayTitle").textContent = selectedDateStr;
+
+    // checkbox state
+    document.getElementById("chkDayBlocked").checked = blockedDays.has(selectedDateStr);
+
+    await Promise.all([
+      loadDayBookingsDetailed(selectedDateStr),
+      loadDaySlotOverrides(selectedDateStr),
+    ]);
+
+    setBadges();
+    renderBookingsBox();
+    renderSlotsBox();
+  }
+
+  async function refreshMonth(){
+    await loadBlockedDays();
+    await loadMonthBookingsSummary();
+    renderCalendar();
+  }
+
+  function jumpToday(){
+    currentDate = new Date();
+    refreshMonth().then(async () => {
+      const todayStr = toISODateLocal(new Date()); // ✅ local
+      await selectDay(todayStr);
+    });
+  }
+
+  // =========================================================
+  // NAV
+  // =========================================================
+  async function prevMonth(){
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    await refreshMonth();
+  }
+  async function nextMonth(){
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    await refreshMonth();
+  }
+
+  // =========================================================
+  // INIT
+  // =========================================================
+  (async function init(){
+    await checkAdmin();
+    await loadTimeSlots();
+    await refreshMonth();
+    const todayStr = toISODateLocal(new Date()); // ✅ local
+    await selectDay(todayStr);
+  })();
+</script>
+
+<script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

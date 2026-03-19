@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin – Kezelések</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/custom.css">
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+<header class="border-b border-white/10 p-4">
+  <div class="flex justify-between max-w-6xl mx-auto">
+    <h1 class="text-xl font-semibold">Kezelések</h1>
+
+    <a href="/admin-dashboard.html"
+    class="px-4 py-2 bg-white/10 rounded">
+    ← Vissza
+    </a>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto p-6">
+
+<div class="mb-6 flex gap-2">
+
+  <input id="newName"
+  placeholder="Új kezelés neve"
+  class="flex-1 px-3 py-2 rounded bg-white/10">
+
+  <input id="newDuration"
+  type="number"
+  placeholder="Időtartam (perc)"
+  class="w-40 px-3 py-2 rounded bg-white/10">
+
+  <button onclick="addService()"
+  class="px-4 py-2 bg-emerald-600 rounded">
+    Hozzáadás
+  </button>
+
+</div>
+
+<div id="servicesBox" class="space-y-3"></div>
+
+</main>
+
+<script>
+async function checkAdmin(){
+  const r = await fetch("/admin/check");
+  const d = await r.json();
+  if(!d.loggedIn) location.href="/admin-login.html";
+}
+
+async function loadServices() {
+  const res = await fetch("/api/admin/services");
+  const data = await res.json();
+
+  const box = document.getElementById("servicesBox");
+  box.innerHTML = "";
+
+  data.forEach(s => {
+    const row = document.createElement("div");
+
+    row.className = "flex gap-2";
+
+    row.innerHTML = `
+    <input value="${s.name}" id="name-${s.id}"
+    class="flex-1 px-3 py-2 rounded bg-white/10">
+
+    <input type="number" value="${s.duration_minutes}" id="duration-${s.id}"
+    class="w-32 px-3 py-2 rounded bg-white/10">
+
+    <button onclick="save(${s.id})"
+    class="px-3 py-2 bg-emerald-600 rounded">
+      Mentés
+    </button>
+
+    <button onclick="removeService(${s.id})"
+    class="px-3 py-2 bg-red-600 rounded">
+      Törlés
+    </button>
+  `;
+    
+    box.appendChild(row);
+
+  });
+}
+
+async function save(id) {
+  const name = document.getElementById(`name-${id}`).value;
+  const duration = document.getElementById(`duration-${id}`).value;
+
+  await fetch("/api/admin/services/update", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      id,
+      name,
+      duration: Number(duration)
+    })
+  });
+
+  alert("Mentve ✅");
+}
+
+async function addService() {
+  const name = document.getElementById("newName").value;
+  const duration = document.getElementById("newDuration").value;
+
+  if (!name || !duration) {
+    alert("Adj meg nevet és időtartamot!");
+    return;
+  }
+
+  await fetch("/api/admin/services/add", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name,
+      duration: Number(duration)
+    })
+  });
+
+  document.getElementById("newName").value = "";
+  document.getElementById("newDuration").value = "";
+
+  loadServices();
+}
+
+async function removeService(id) {
+  if (!confirm("Biztos törlöd?")) return;
+
+  await fetch(`/api/admin/services/${id}`, {
+    method: "DELETE"
+  });
+
+  loadServices();
+}
+
+(async function init(){
+  await checkAdmin();
+  loadServices();
+})();
+</script>
+
+
+
+
+</body>
+</html>

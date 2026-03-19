@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zöld Tara háza – Gargya Kriszti</title>
+  <meta name="description" content="Mentálhigiénés segítő beszélgetések és holisztikus módszerek – önismeret, stresszkezelés, elakadások támogatása." />
+  <meta name="robots" content="index,follow" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+
+<!-- COOKIE OVERLAY -->
+<div id="cookieOverlay"
+     class="fixed inset-0 z-[90] hidden bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+</div>
+
+<!-- COOKIE BANNER -->
+<div id="cookieBanner"
+     class="fixed bottom-0 left-0 right-0 z-[100] translate-y-full transition-transform duration-500">
+
+  <div class="mx-auto max-w-5xl rounded-t-3xl border border-emerald-200/20 bg-emerald-950 p-6 shadow-2xl">
+
+    <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+
+      <div class="max-w-2xl">
+        <h3 class="text-lg font-semibold text-emerald-50">
+          Adatvédelmi beállítások
+        </h3>
+        <p class="mt-2 text-sm text-emerald-100/80 leading-relaxed">
+          Weboldalunk sütiket használ a megfelelő működés és a felhasználói élmény javítása érdekében.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <button id="cookieDecline"
+          class="rounded-2xl px-4 py-2 text-sm text-emerald-100/80 hover:text-emerald-50 transition">
+          Elutasítom
+        </button>
+
+        <button id="cookieAccept"
+          class="rounded-2xl bg-emerald-300/20 px-5 py-2 text-sm font-semibold ring-1 ring-emerald-200/30 hover:bg-emerald-300/30 transition">
+          Elfogadom
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="cookieModal"
+     class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+
+  <div class="w-[95%] max-w-lg rounded-3xl bg-emerald-950 p-8 shadow-2xl border border-emerald-200/20">
+
+    <h3 class="text-lg font-semibold text-emerald-50">
+      Süti beállítások
+    </h3>
+
+    <div class="mt-6 space-y-4 text-sm text-emerald-100/80">
+
+      <label class="flex items-center justify-between">
+        <span>Szükséges sütik</span>
+        <input type="checkbox" checked disabled>
+      </label>
+
+      <label class="flex items-center justify-between">
+        <span>Statisztikai sütik</span>
+        <input type="checkbox" id="cookieAnalytics">
+      </label>
+
+      <label class="flex items-center justify-between">
+        <span>Marketing sütik</span>
+        <input type="checkbox" id="cookieMarketing">
+      </label>
+
+    </div>
+
+    <div class="mt-8 flex justify-end gap-3">
+      <button id="cookieSave"
+        class="rounded-2xl bg-emerald-300/20 px-5 py-2 text-sm font-semibold ring-1 ring-emerald-200/30 hover:bg-emerald-300/30 transition">
+        Mentés
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+
+<!-- SKELETON LOADER -->
+<div id="pageLoader" class="fixed inset-0 z-[9999] bg-emerald-950 flex items-center justify-center transition-opacity duration-500">
+
+  <div class="w-full max-w-4xl px-6 space-y-6 animate-pulse">
+
+    <div class="h-10 w-48 bg-emerald-800/50 rounded-xl"></div>
+
+    <div class="h-6 w-3/4 bg-emerald-800/40 rounded-lg"></div>
+    <div class="h-6 w-2/3 bg-emerald-800/40 rounded-lg"></div>
+
+    <div class="grid grid-cols-3 gap-4 mt-10">
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+    </div>
+
+  </div>
+</div>
+  
+
+  <!-- optional film grain -->
+  <div class="pointer-events-none fixed inset-0 opacity-[0.07] mix-blend-overlay z-0"
+       style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22120%22 height=%22120%22 filter=%22url(%23n)%22 opacity=%220.35%22/%3E%3C/svg%3E');">
+  </div>
+
+
+
+  <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="flex items-center justify-between">
+  
+        <!-- 1) LOGÓ balra (NAVBAR) – DISZKRÉTEN (a te stílusod marad) -->
+        <a id="adminTriggerLogo" href="index.html" class="flex items-center">
+          <img
+            src="assets/img/logo.svg"
+            alt="Zöld Tara háza logó"
+            class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          />
+        </a>
+          <!-- HAMBURGER (csak mobilon látszik) -->
+          <button id="mobileMenuBtn"
+            class="ml-auto md:hidden inline-flex items-center justify-center rounded-xl p-2 bg-emerald-300/10 ring-1 ring-emerald-200/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        <!-- MENÜ KÖZÉPEN -->
+        <nav class="hidden justify-center gap-2 md:flex">
+  
+          <a data-page="index.html"
+             href="index.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- home -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Home
+          </a>
+  
+          <a data-page="bemutatkozas.html"
+             href="bemutatkozas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- user -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Bemutatkozás
+          </a>
+  
+          <a data-page="szolgaltatasok.html"
+             href="szolgaltatasok.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- grid -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Szolgáltatások
+          </a>
+  
+          <a data-page="arlista.html"
+             href="arlista.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- tag -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 13l-7 7-10-10V3h7l10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M7.5 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Árlista
+          </a>
+  
+          <a data-page="foglalas.html"
+             href="foglalas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M8 3v3M16 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Időpontfoglalás
+          </a>
+  
+          <a data-page="kapcsolat.html"
+             href="kapcsolat.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- mail -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Kapcsolat
+          </a>
+  
+
+  
+        </nav>
+  
+      </div>
+    </div>
+  </header>
+  
+  <div id="mobileMenu"
+    class="md:hidden hidden border-b border-emerald-200/10 bg-emerald-950/95 backdrop-blur">
+
+    <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-emerald-50/90">
+      <a href="index.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Home</a>
+      <a href="bemutatkozas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Bemutatkozás</a>
+      <a href="szolgaltatasok.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Szolgáltatások</a>
+      <a href="arlista.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Árlista</a>
+      <a href="foglalas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Időpontfoglalás</a>
+      <a href="kapcsolat.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Kapcsolat</a>
+    </div>
+  </div>
+
+
+  <main class="noise mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm">
+
+    <div class="grid gap-8 p-8 lg:grid-cols-12 lg:gap-10 lg:p-12">
+      <!-- LEFT -->
+      <div class="lg:col-span-7">
+
+        <!-- 2) HERO MINI SIGNATURE – CÍM FELETT (diszkrét) -->
+       
+
+        
+
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.07] px-4 py-2 text-sm text-white/85">
+          <span class="inline-flex h-2 w-2 rounded-full bg-teal-300 shadow-[0_0_0_4px_rgba(94,234,212,0.10)]"></span>
+          <span class="ml-2 font-medium tracking-tight">Zöld Tara háza</span>
+        </div>
+
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          A változás Veled kezdődik. Készen állsz?
+
+        </h1>
+
+        <p class="mt-4 max-w-2xl leading-relaxed text-white/70">
+          Biztonságos, nyugodt térben segítek ránézni arra, ahol úgy érzed, elakadtál.
+        </p>
+
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-6 py-3 text-sm font-semibold text-[#06201b]
+                    shadow-[0_16px_40px_-22px_rgba(94,234,212,0.9)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-teal-200 hover:shadow-[0_18px_50px_-24px_rgba(94,234,212,1)]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                    rm:transform-none"
+             aria-label="Időpontfoglalás">
+            Időpontfoglalás
+          </a>
+
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                    rm:transform-none"
+             aria-label="Üzenetet írok">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT (PORTRAIT) -->
+      <div class="lg:col-span-5">
+        <div class="relative overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04] p-4 shadow-[0_12px_45px_-30px_rgba(0,0,0,0.9)]">
+          <div class="pointer-events-none absolute -inset-6 rounded-[2.2rem] bg-gradient-to-b from-teal-300/18 via-white/0 to-white/0 blur-2xl"></div>
+
+          <div class="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.03]">
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#04110F]/55 via-transparent to-white/10"></div>
+
+            <img
+              src="assets/img/bemutatkozas.jpg"
+              alt="Gargya Kriszti portré"
+              class="h-[420px] w-full object-cover object-[55%_35%] sm:h-[520px]"
+            />
+          </div>
+          
+
+          <div class="mt-4 flex items-center justify-between text-xs text-white/65">
+            <!-- 3) PORTRÉ ALJÁN – PECSÉT SZERŰEN (csak egy mini logó a chipben) -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <section class="mt-10 grid gap-6 lg:grid-cols-12 lg:gap-8" aria-label="Mit kapsz itt">
+    <article class="lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-7 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+      <div class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-teal-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2 class="mt-4 text-xl font-semibold tracking-tight text-white">Tisztább rálátás</h2>
+      <p class="mt-2 text-sm leading-relaxed text-white/70">
+        Közösen rendet teszünk a zajban: felismerheted, mik a motivációk a döntéseid mögött, milyen öröklött családi minták befolyásolják az életedet. A megértések hozzásegítenek egy tudatosabb élethez.
+      </p>
+    </article>
+
+    <article class="lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-7 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+      <div class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-teal-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21s-7-4.5-7-11a7 7 0 0 1 14 0c0 6.5-7 11-7 11z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4z" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </div>
+      <h2 class="mt-4 text-xl font-semibold tracking-tight text-white">Feltöltődés, relaxáció</h2>
+      <p class="mt-2 text-sm leading-relaxed text-white/70">
+        A biztonság és a nyugalom nem 'kiváltság', hanem az egészséges élet alapköve. A cél, hogy újra kapcsolódni tudj a saját békéddel.
+      </p>
+    </article>
+
+    <article class="lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-7 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+      <div class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-teal-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17l10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M8 7h4v4H8V7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12 13h4v4h-4v-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="mt-4 text-xl font-semibold tracking-tight text-white">Kézzelfogható lépések</h2>
+      <p class="mt-2 text-sm leading-relaxed text-white/70">
+        Minden konzultáción csak addig haladunk, ameddig a Lelkednek kényelmes. Bármikor megállhatunk és kérdezhetsz.
+      </p>
+    </article>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section class="mt-14" aria-label="Szolgáltatások előnézet">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight text-white">Szolgáltatások – röviden</h2>
+        <p class="mt-2 max-w-2xl text-sm text-white/65">
+          Választhatsz beszélgetés-alapú támogatást vagy finom, testet is bevonó módszereket — attól függően, mire van most szükséged.
+        </p>
+      </div>
+
+      <a href="szolgaltatasok.html"
+         class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white/90
+                transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.07]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                rm:transform-none"
+         aria-label="Összes szolgáltatás">
+        Összes szolgáltatás
+      </a>
+    </div>
+
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      <!-- card -->
+      <article class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+        <h3 class="text-base font-semibold tracking-tight text-white">Mentálhigiénés segítő beszélgetés</h3>
+        <a href="szolgaltatasok.html"
+           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal-200/90 underline decoration-white/10 underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+           aria-label="Részletek – Mentálhigiénés segítő beszélgetés">
+          Részletek
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+        <h3 class="text-base font-semibold tracking-tight text-white">Hangtál terápia</h3>
+        <a href="szolgaltatasok.html"
+           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal-200/90 underline decoration-white/10 underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+           aria-label="Részletek – Hangtál terápia">
+          Részletek
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+        <h3 class="text-base font-semibold tracking-tight text-white">Energiakezelés</h3>
+        <a href="szolgaltatasok.html"
+           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal-200/90 underline decoration-white/10 underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+           aria-label="Részletek – Energiakezelés">
+          Részletek
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+        <h3 class="text-base font-semibold tracking-tight text-white">Theta Healing</h3>
+        <a href="szolgaltatasok.html"
+           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal-200/90 underline decoration-white/10 underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+           aria-label="Részletek – Theta Healing">
+          Részletek
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+        <h3 class="text-base font-semibold tracking-tight text-white">Vezetett meditáció</h3>
+        <a href="szolgaltatasok.html"
+           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal-200/90 underline decoration-white/10 underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+           aria-label="Részletek – Vezetett meditáció">
+          Részletek
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08] rm:transform-none">
+        <h3 class="text-base font-semibold tracking-tight text-white">Metamorf masszázs</h3>
+        <a href="szolgaltatasok.html"
+           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal-200/90 underline decoration-white/10 underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+           aria-label="Részletek – Metamorf masszázs">
+          Részletek
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="mt-14 rounded-3xl border border-white/10 bg-white/[0.06] p-8 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm lg:p-10" aria-label="Így dolgozunk">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight text-white">Így dolgozom</h2>
+        <p class="mt-2 max-w-2xl text-sm text-white/65">
+          Egy egyszerű, tartható ív — ami közben végig figyelünk a biztonságodra és a tempódra.
+        </p>
+      </div>
+      <div class="hidden sm:block text-sm text-white/55">3 lépés • tiszta keret</div>
+    </div>
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-3 lg:gap-8">
+      <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/80">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300"></span> 1.
+        </div>
+        <h3 class="mt-3 text-lg font-semibold tracking-tight text-white">Megérkezés</h3>
+        <p class="mt-2 text-sm leading-relaxed text-white/70">
+          Miután felvettük a kapcsolatot, megnézzük, milyen módszer lenne a legalkalmasabb, amivel segíthetnélek az utadon.
+        </p>
+      </div>
+
+      <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/80">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300"></span> 2.
+        </div>
+        <h3 class="mt-3 text-lg font-semibold tracking-tight text-white">Közös fókusz</h3>
+        <p class="mt-2 text-sm leading-relaxed text-white/70">
+          A lényegre figyelünk: mi ismétlődik és miért. Milyen célokat tudunk elérni rövid és hosszú távon.
+        </p>
+      </div>
+
+      <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/80">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300"></span> 3.
+        </div>
+        <h3 class="mt-3 text-lg font-semibold tracking-tight text-white">Hosszútávú változás</h3>
+        <p class="mt-2 text-sm leading-relaxed text-white/70">
+           A konzultációk után mindig Veled marad egy új nézőpont, egy felismerés.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- BOTTOM CTA -->
+  <section class="mt-14 rounded-3xl border border-white/10 bg-white/[0.06] p-8 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm lg:p-10">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-8">
+        <h2 class="text-2xl font-semibold tracking-tight text-white">Kezdjük el</h2>
+        <p class="mt-2 leading-relaxed text-white/70">
+          Ha készen állsz, foglalj időpontot. Ha bizonytalan vagy, írj egy rövid üzenetet - minden kérdésedre szívesen válaszolok.
+        </p>
+      </div>
+
+      <div class="lg:col-span-4 flex flex-wrap gap-3 lg:justify-end">
+        <a href="foglalas.html"
+           class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-6 py-3 text-sm font-semibold text-[#06201b]
+                  shadow-[0_16px_40px_-22px_rgba(94,234,212,0.9)]
+                  transition rm:transition-none hover:-translate-y-0.5 hover:bg-teal-200 hover:shadow-[0_18px_50px_-24px_rgba(94,234,212,1)]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                  rm:transform-none">
+          Időpontfoglalás
+        </a>
+
+        <a href="kapcsolat.html"
+           class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/90
+                  transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.07]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                  rm:transform-none">
+          Üzenetet küldök
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+ <!-- Vissza a tetejére gomb -->
+
+<button
+  id="toTop"
+  type="button"
+  aria-label="Vissza a tetejére"
+  class="fixed bottom-5 right-5 z-[9999] translate-x-0 hidden rounded-full bg-emerald-300/15 p-3 ring-1 ring-emerald-200/20 backdrop-blur hover:bg-emerald-300/25"
+  style="position: fixed !important;"
+>
+  <!-- nyíl ikon (SVG) -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+    <path d="M12 5l-7 7m7-7l7 7M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+  <footer class="border-t border-emerald-200/10 bg-emerald-950/60">
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 md:grid-cols-3">
+      <div>
+        <div class="text-sm font-semibold text-emerald-50">Zöld Tara háza</div>
+        <p class="mt-3 text-sm text-emerald-100/70">
+          Mentálhigiénés segítő beszélgetések és holisztikus módszerek – az önismereti út támogatására.
+        </p>
+      </div>
+
+      <div>
+        <div class="text-sm font-semibold text-emerald-50">Gyorslinkek</div>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li><a class="text-emerald-100/70 hover:text-emerald-50" href="adatkezeles.html">Adatkezelési tájékoztató</a></li>
+          <li><a class="text-emerald-100/70 hover:text-emerald-50" href="sutikezeles.html">Sütikezelés</a></li>
+          <li><a class="text-emerald-100/70 hover:text-emerald-50" href="kapcsolat.html">Kapcsolat</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="text-sm font-semibold text-emerald-50">Kapcsolat</div>
+        <p class="mt-3 text-sm text-emerald-100/70">
+          Email: <a class="underline hover:text-emerald-50" href="mailto:zoldtarahaza@gmail.com">zoldtarahaza@gmail.com</a>
+        </p>
+        <p class="mt-2 text-sm text-emerald-100/70">
+          Facebook: <a class="underline hover:text-emerald-50" target="_blank" rel="noopener"
+            href="https://www.facebook.com/profile.php?id=61584199833965">oldal megnyitása</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="border-t border-emerald-200/10 py-4">
+  <div class="mx-auto max-w-6xl px-4 text-xs text-emerald-100/60 flex flex-col sm:flex-row sm:justify-between gap-2">
+
+    <div>
+      © <span id="y"></span> Zöld Tara háza – Minden jog fenntartva.
+    </div>
+
+    <div class="text-emerald-100/40 hover:text-emerald-100/70 transition">
+      Created by: 
+      <a href="https://elendes.hu" target="_blank" rel="noopener" 
+         class="underline decoration-emerald-100/20 hover:decoration-emerald-100/60">
+        ELENDES
+      </a>
+    </div>
+
+  </div>
+</div>
+
+    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  </footer>
+
+<script>
+  const logo = document.getElementById('adminTriggerLogo');
+
+  logo.addEventListener('click', function (e) {
+    if (e.shiftKey) {
+      e.preventDefault();
+      window.location.href = "admin-login.html"; 
+      // fontos: NE legyen admin-login.html a neve
+    }
+  });
+</script>
+
+
+<script>
+  const toTop = document.getElementById('toTop');
+  const footer = document.querySelector('footer');
+
+  function updateToTop() {
+    const scrollY = window.scrollY;
+    const windowH = window.innerHeight;
+    const docH = document.body.scrollHeight;
+
+    // megjelenés
+    if (scrollY > 250) toTop.classList.remove('hidden');
+    else toTop.classList.add('hidden');
+
+    // footer ütközés
+    const footerTop = footer.getBoundingClientRect().top;
+
+    if (footerTop < windowH) {
+      const overlap = windowH - footerTop;
+      toTop.style.bottom = (20 + overlap) + "px";
+    } else {
+      toTop.style.bottom = "20px";
+    }
+  }
+
+  window.addEventListener('scroll', updateToTop);
+  window.addEventListener('resize', updateToTop);
+  updateToTop();
+
+  toTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+<script src="assets/js/cookie.js"></script>
+
+<script>
+  const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  document.querySelectorAll('a[data-page]').forEach(a => {
+    const page = (a.getAttribute('data-page') || '').toLowerCase();
+    if (page === current) {
+      a.classList.add('opacity-60');
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("pageLoader");
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("mobileMenuBtn");
+    const menu = document.getElementById("mobileMenu");
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+
+    // ha rákattintasz egy linkre, csukja be
+    menu.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => menu.classList.add("hidden"));
+    });
+  });
+</script>
+
+
+</body>
+</html>

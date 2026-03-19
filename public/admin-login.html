@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin belépés – Zöld Tara háza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+  <!-- HEADER (ugyanaz a vibe, egyszerűsítve) -->
+  <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="grid items-center gap-3 md:grid-cols-[auto_1fr]">
+        <a href="index.html" class="flex items-center gap-3">
+          <img
+            src="assets/img/logo.svg"
+            alt="Zöld Tara háza logó"
+            class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          />
+          <div class="leading-tight">
+            <div class="text-sm text-emerald-50/70">Zöld Tara háza</div>
+            <div class="text-base font-semibold tracking-tight text-white">Admin belépés</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="mx-auto flex min-h-[calc(100vh-92px)] max-w-6xl items-center justify-center px-4 py-10">
+    <section class="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] p-8 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm">
+      <div class="pointer-events-none absolute -inset-10 bg-gradient-to-b from-teal-300/10 via-transparent to-transparent blur-2xl"></div>
+
+      <div class="relative">
+        <h1 class="text-2xl font-semibold tracking-tight text-white">Admin belépés</h1>
+        <p class="mt-2 text-sm text-white/70">Add meg a jelszót a foglalások kezeléséhez.</p>
+
+        <label class="mt-6 block text-sm text-white/70">Jelszó</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="••••••••••••"
+          class="mt-2 w-full rounded-2xl border border-white/10 bg-emerald-950/40 px-4 py-3 text-white placeholder:text-white/35 outline-none ring-1 ring-white/5 focus:ring-2 focus:ring-teal-300/60"
+        />
+
+        <button
+          id="btnLogin"
+          onclick="login()"
+          class="mt-5 inline-flex w-full items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] px-6 py-3 text-sm font-semibold text-white/90 transition hover:-translate-y-0.5 hover:bg-white/[0.10] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]"
+        >
+          Belépés
+        </button>
+
+        <p id="error" class="mt-3 hidden text-sm text-red-300">
+          Hibás jelszó.
+        </p>
+
+        <p class="mt-6 text-xs text-white/45">
+          Tipp: Enterrel is működik.
+        </p>
+        <div class="mt-6 flex justify-center">
+          <a href="index.html"
+            class="text-sm text-white/60 hover:text-white transition">
+            ← Vissza a főoldalra
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Enter -> belépés
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") login();
+    });
+
+    async function login() {
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        window.location.href = "/admin-dashboard.html";
+      } else {
+        document.getElementById("error").classList.remove("hidden");
+      }
+    }
+  </script>
+
+  <script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

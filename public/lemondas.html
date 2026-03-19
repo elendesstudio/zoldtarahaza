@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Időpont lemondása – Zöld Tara háza</title>
+  <meta name="description" content="Foglalás lemondása 24 órával az időpont előtt." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+  <main class="mx-auto max-w-xl px-4 py-14">
+    <a href="index.html" class="inline-flex items-center gap-2 text-sm text-emerald-100/80 hover:text-emerald-100">
+      ← Vissza a főoldalra
+    </a>
+
+    <div class="mt-6 rounded-3xl border border-emerald-200/10 bg-emerald-950/60 p-6">
+      <h1 class="text-2xl font-semibold">Időpont lemondása</h1>
+      <p class="mt-2 text-sm text-emerald-100/70">
+        Itt tudod lemondani a foglalásod. Lemondás csak <strong>24 órával az időpont előtt</strong> lehetséges.
+      </p>
+
+      <div id="info" class="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-emerald-100/80">
+        Betöltés…
+      </div>
+
+      <button id="btnCancel"
+        class="mt-6 w-full rounded-2xl bg-rose-300/15 px-5 py-3 text-sm font-semibold ring-1 ring-rose-200/20 hover:bg-rose-300/20 disabled:opacity-40 disabled:hover:bg-rose-300/15">
+        Időpont lemondása
+      </button>
+
+      <div id="toast" class="mt-4 hidden rounded-2xl border border-white/10 bg-black/30 p-4 text-sm"></div>
+    </div>
+  </main>
+
+<script>
+  const info = document.getElementById("info");
+  const toast = document.getElementById("toast");
+  const btnCancel = document.getElementById("btnCancel");
+
+  function showToast(text, kind="info") {
+    toast.classList.remove("hidden");
+    toast.textContent = text;
+    toast.classList.remove("border-rose-200/20","border-emerald-200/20");
+    toast.classList.add(kind === "error" ? "border-rose-200/20" : "border-emerald-200/20");
+  }
+
+  function getToken() {
+    const p = new URLSearchParams(location.search);
+    return (p.get("token") || "").trim();
+  }
+
+  async function apiGet(url) {
+    const res = await fetch(url, { headers: { "Accept": "application/json" } });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+    return data;
+  }
+
+  async function apiPost(url, body) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+    return data;
+  }
+
+  async function loadInfo() {
+    const token = getToken();
+    if (!token) {
+      info.textContent = "Hiányzó token. Kérlek az emailben kapott linket használd.";
+      btnCancel.disabled = true;
+      return;
+    }
+
+    try {
+      const data = await apiGet(`/api/bookings/cancel-info?token=${encodeURIComponent(token)}`);
+      const b = data.booking;
+
+      // ===== STÁTUSZ FORDÍTÁS =====
+      let statusLabel = "";
+      if (b.status === "confirmed") {
+        statusLabel = "Aktív";
+      } else if (b.status === "cancelled") {
+        statusLabel = "Lemondva";
+      } else {
+        statusLabel = b.status;
+      }
+
+      info.innerHTML = `
+        <div class="space-y-1">
+          <div><span class="text-emerald-100/60">Szolgáltatás:</span> <strong class="text-emerald-50">${b.serviceName}</strong></div>
+          <div><span class="text-emerald-100/60">Dátum:</span> <strong class="text-emerald-50">${b.date}</strong></div>
+          <div><span class="text-emerald-100/60">Idősáv:</span> <strong class="text-emerald-50">${b.slot}</strong></div>
+          <div><span class="text-emerald-100/60">Állapot:</span> <strong class="text-emerald-50">${statusLabel}</strong></div>
+        </div>
+      `;
+
+      if (!b.cancellable) {
+        btnCancel.disabled = true;
+
+        if (b.status !== "confirmed") {
+          showToast("Foglalását sikeresen töröltük.", "info");
+          btnCancel.textContent = "Lemondva";
+        } else {
+          showToast(
+            "Ez az időpont már 24 órán belül van, ezért nem mondható le online.",
+            "error"
+          );
+        }
+      } else {
+        btnCancel.disabled = false;
+        btnCancel.textContent = "Időpont lemondása";
+      }
+
+    } catch (e) {
+      info.textContent = "Nem sikerült betölteni a foglalás adatait.";
+      btnCancel.disabled = true;
+      showToast(e.message || "Hiba történt.", "error");
+    }
+  }
+
+  btnCancel.addEventListener("click", async () => {
+    const token = getToken();
+    if (!token) return;
+
+    btnCancel.disabled = true;
+    btnCancel.textContent = "Lemondás folyamatban…";
+
+    try {
+      await apiPost("/api/bookings/cancel", { token });
+      showToast("Foglalását sikeresen töröltük.", "info");
+      btnCancel.textContent = "Lemondva";
+      await loadInfo();
+    } catch (e) {
+      btnCancel.disabled = false;
+      btnCancel.textContent = "Időpont lemondása";
+      showToast(e.message || "Hiba történt.", "error");
+    }
+  });
+
+  loadInfo();
+</script>
+</body>
+</html>

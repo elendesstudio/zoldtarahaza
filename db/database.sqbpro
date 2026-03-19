@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="database.sqlite" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2424"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="blocked_days" custom_title="0" dock_id="2" table="4,12:mainblocked_days"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000ffffffff0000011e00ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">BEGIN TRANSACTION;
+
+CREATE TABLE bookings_new (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  service_id INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  slot TEXT NOT NULL,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL,
+  note TEXT,
+  status TEXT DEFAULT 'confirmed',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  cancel_token TEXT,
+  cancelled_at DATETIME,
+  FOREIGN KEY(service_id) REFERENCES services(id)
+);
+
+INSERT INTO bookings_new (
+  id, service_id, date, slot, name, phone, email, note,
+  status, created_at, cancel_token, cancelled_at
+)
+SELECT
+  id, service_id, date, slot, name, phone, email, note,
+  status, created_at,
+  NULL as cancel_token,
+  NULL as cancelled_at
+FROM bookings;
+
+DROP TABLE bookings;
+
+ALTER TABLE bookings_new RENAME TO bookings;
+
+CREATE UNIQUE INDEX ux_bookings_confirmed_slot
+ON bookings(service_id, date, slot)
+WHERE status = 'confirmed';
+
+COMMIT;</sql><current_tab id="0"/></tab_sql></sqlb_project>

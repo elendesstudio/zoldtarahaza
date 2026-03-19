@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin – Összes foglalás</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/custom.css">
+
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+<header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+
+<div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+
+<div class="flex items-center gap-3">
+
+<img src="assets/img/logo.svg"
+class="h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"/>
+
+<div>
+<div class="text-sm text-emerald-50/70">Zöld Tara háza</div>
+<div class="text-base font-semibold">Admin • Összes foglalás</div>
+</div>
+
+</div>
+
+<div class="flex gap-2">
+
+<a href="admin-dashboard.html"
+class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-sm">
+Naptár
+</a>
+
+<button onclick="logout()"
+class="px-4 py-2 rounded-2xl bg-red-600 hover:bg-red-700 text-sm font-semibold">
+Kilépés
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+<main class="mx-auto max-w-6xl px-4 py-8">
+
+<section class="rounded-3xl border border-white/10 bg-white/[0.04] p-6 ring-1 ring-white/5 backdrop-blur-sm">
+
+<div class="flex items-center justify-between mb-6">
+
+<h2 class="text-xl font-semibold">
+Összes foglalás
+</h2>
+
+<div class="flex gap-2">
+
+<button onclick="loadBookings('all')"
+class="px-3 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-sm">
+Összes
+</button>
+
+<button onclick="loadBookings('active')"
+class="px-3 py-2 rounded-2xl bg-emerald-600/40 hover:bg-emerald-600/60 text-sm">
+Aktív
+</button>
+
+<button onclick="loadBookings('deleted')"
+class="px-3 py-2 rounded-2xl bg-red-600/40 hover:bg-red-600/60 text-sm">
+Törölt
+</button>
+
+</div>
+
+</div>
+
+
+<div class="overflow-x-auto">
+
+<table class="w-full text-sm">
+
+<thead class="border-b border-white/10 text-white/60">
+
+<tr>
+
+<th class="py-3 px-3 text-left">Szolgáltatás</th>
+<th class="py-3 px-3 text-left">Dátum</th>
+<th class="py-3 px-3 text-left">Időpont</th>
+<th class="py-3 px-3 text-left">Név</th>
+<th class="py-3 px-3 text-left">Email</th>
+<th class="py-3 px-3 text-left">Telefon</th>
+<th class="py-3 px-3 text-left">Megjegyzés</th>
+<th class="py-3 px-3 text-left">Státusz</th>
+<th class="py-3 px-3"></th>
+
+</tr>
+
+</thead>
+
+<tbody id="bookingsTable"
+class="divide-y divide-white/10"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+</main>
+
+
+<script>
+
+async function checkAdmin(){
+const r = await fetch("/admin/check");
+const d = await r.json();
+if(!d.loggedIn) location.href="/admin-login.html";
+}
+
+async function logout(){
+await fetch("/admin/logout");
+location.href="/admin-login.html";
+}
+
+
+async function loadBookings(filter){
+
+let url="/api/admin/bookings-all";
+
+if(filter==="active") url+="?filter=active";
+if(filter==="deleted") url+="?filter=deleted";
+
+const r = await fetch(url);
+const data = await r.json();
+
+const table = document.getElementById("bookingsTable");
+table.innerHTML="";
+
+data.forEach(b=>{
+
+const row=document.createElement("tr");
+row.className="border-b border-white/10";
+
+row.innerHTML=`
+
+<td class="p-3">${b.service_name||""}</td>
+<td class="py-3 px-3 whitespace-nowrap">${b.date}</td>
+<td class="py-3 px-3 whitespace-nowrap">${b.slot}</td>
+<td class="p-3">${b.name||""}</td>
+<td class="p-3">${b.email||""}</td>
+<td class="p-3">${b.phone||""}</td>
+<td class="p-3">${b.note||""}</td>
+
+<td class="p-3">
+
+${b.deleted==1
+? '<span class="px-2 py-1 rounded bg-red-600/40 text-xs">törölt</span>'
+: '<span class="px-2 py-1 rounded bg-emerald-600/40 text-xs">aktív</span>'}
+
+</td>
+
+<td class="p-3">
+
+${b.deleted==1
+? `<button onclick="restore(${b.id})"
+class="px-4 py-2 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 text-xs font-semibold whitespace-nowrap">
+Újraaktiválás
+</button>`
+: ''}
+
+</td>
+
+`;
+
+table.appendChild(row);
+
+});
+
+}
+
+async function restore(id){
+
+await fetch(`/api/admin/bookings/${id}/restore`,{
+method:"POST"
+});
+
+loadBookings("all");
+
+}
+
+
+(async function init(){
+await checkAdmin();
+loadBookings("all");
+})();
+
+</script>
+
+<script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

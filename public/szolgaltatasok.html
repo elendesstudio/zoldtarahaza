@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Szolgáltatások – Zöld Tara háza</title>
+  <meta name="description" content="Szolgáltatások – Zöld Tara háza, Gargya Kriszti." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+
+    <!-- SKELETON LOADER -->
+<div id="pageLoader" class="fixed inset-0 z-[9999] bg-emerald-950 flex items-center justify-center transition-opacity duration-500">
+
+  <div class="w-full max-w-4xl px-6 space-y-6 animate-pulse">
+
+    <div class="h-10 w-48 bg-emerald-800/50 rounded-xl"></div>
+
+    <div class="h-6 w-3/4 bg-emerald-800/40 rounded-lg"></div>
+    <div class="h-6 w-2/3 bg-emerald-800/40 rounded-lg"></div>
+
+    <div class="grid grid-cols-3 gap-4 mt-10">
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+    </div>
+
+  </div>
+</div>
+  
+    <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+        <div class="mx-auto max-w-6xl px-4 py-3">
+          <div class="flex items-center justify-between">
+      
+            <!-- LOGÓ balra -->
+            <a id="adminTriggerLogo" href="index.html" class="flex items-center">
+              <img
+                src="assets/img/logo.svg"
+                alt="Zöld Tara háza logó"
+                class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+              />
+            </a>
+      
+
+              <!-- HAMBURGER (csak mobilon látszik) -->
+  <button id="mobileMenuBtn"
+    class="ml-auto md:hidden inline-flex items-center justify-center rounded-xl p-2 bg-emerald-300/10 ring-1 ring-emerald-200/20">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+            <!-- MENÜ KÖZÉPEN -->
+            <nav class="hidden justify-center gap-2 md:flex">
+      
+              <a data-page="index.html"
+                 href="index.html"
+                 class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+                  <!-- home -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                      stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                Home
+              </a>
+      
+              <a data-page="bemutatkozas.html"
+                 href="bemutatkozas.html"
+                 class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+                  <!-- user -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </span>
+                Bemutatkozás
+              </a>
+      
+              <a data-page="szolgaltatasok.html"
+                 href="szolgaltatasok.html"
+                 class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+                  <!-- grid -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"
+                      stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                Szolgáltatások
+              </a>
+      
+              <a data-page="arlista.html"
+                 href="arlista.html"
+                 class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+                  <!-- tag -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 13l-7 7-10-10V3h7l10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M7.5 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                Árlista
+              </a>
+      
+              <a data-page="foglalas.html"
+                 href="foglalas.html"
+                 class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+                  <!-- calendar -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 3v3M16 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                Időpontfoglalás
+              </a>
+      
+              <a data-page="kapcsolat.html"
+                 href="kapcsolat.html"
+                 class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+                  <!-- mail -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                Kapcsolat
+              </a>
+      
+      
+            </nav>
+      
+          </div>
+        </div>
+      </header>
+
+      <div id="mobileMenu"
+  class="md:hidden hidden border-b border-emerald-200/10 bg-emerald-950/95 backdrop-blur">
+
+  <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-emerald-50/90">
+    <a href="index.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Home</a>
+    <a href="bemutatkozas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Bemutatkozás</a>
+    <a href="szolgaltatasok.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Szolgáltatások</a>
+    <a href="arlista.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Árlista</a>
+    <a href="foglalas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Időpontfoglalás</a>
+    <a href="kapcsolat.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Kapcsolat</a>
+  </div>
+</div>
+
+<main class="noise mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] p-8 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm lg:p-12">
+    <div class="pointer-events-none absolute -inset-8 bg-gradient-to-b from-teal-300/10 via-transparent to-transparent blur-2xl"></div>
+
+      <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+        Szolgáltatások
+      </h1>
+
+
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a href="foglalas.html"
+           class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-6 py-3 text-sm font-semibold text-[#06201b]
+                  shadow-[0_16px_40px_-22px_rgba(94,234,212,0.9)]
+                  transition rm:transition-none hover:-translate-y-0.5 hover:bg-teal-200 hover:shadow-[0_18px_50px_-24px_rgba(94,234,212,1)]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                  rm:transform-none"
+           aria-label="Időpontfoglalás">
+          Időpontfoglalás
+        </a>
+
+        <a href="kapcsolat.html"
+           class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/90
+                  transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.07]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                  rm:transform-none"
+           aria-label="Üzenetet írok">
+          Üzenetet írok
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH + FILTERS -->
+  <section class="mt-8 rounded-3xl border border-white/10 bg-white/[0.04] p-5 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.7)] ring-1 ring-white/5 backdrop-blur-sm sm:p-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="relative w-full sm:max-w-md">
+        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/45">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </span>
+        <input id="serviceSearch" type="text"
+               placeholder="Gyorskeresés… (pl. relaxáció, család, oldás)"
+               aria-label="Szolgáltatások keresése"
+               class="w-full rounded-2xl border border-white/10 bg-white/[0.05] pl-11 pr-4 py-3 text-sm text-white/85 placeholder:text-white/40
+                      focus:outline-none focus:ring-2 focus:ring-teal-300/50" />
+      </div>
+
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Szolgáltatás szűrők">
+        <button type="button" data-filter="beszelgetes"
+                class="filterChip inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80
+                       transition rm:transition-none hover:bg-white/[0.08]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300/90"></span> Beszélgetés
+        </button>
+        <button type="button" data-filter="relaxacio"
+                class="filterChip inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80
+                       transition rm:transition-none hover:bg-white/[0.08]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300/90"></span> Relaxáció
+        </button>
+        <button type="button" data-filter="testi"
+                class="filterChip inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80
+                       transition rm:transition-none hover:bg-white/[0.08]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300/90"></span> Érzelmi blokkok
+        </button>
+        <button type="button" data-filter="baba"
+                class="filterChip inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80
+                       transition rm:transition-none hover:bg-white/[0.08]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60">
+          <span class="h-1.5 w-1.5 rounded-full bg-teal-300/90"></span> Baba / család
+        </button>
+
+        <button type="button" id="clearFilters"
+                class="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/70
+                       transition rm:transition-none hover:bg-white/[0.06]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+                aria-label="Szűrők törlése">
+          Törlés
+        </button>
+      </div>
+    </div>
+
+    <p id="resultCount" class="mt-4 text-sm text-white/60" aria-live="polite"></p>
+  </section>
+
+  <!-- GRID -->
+  <section class="mt-8 grid gap-6 lg:grid-cols-12 lg:gap-8" id="servicesGrid" aria-label="Szolgáltatások listája">
+
+    <!-- 1 -->
+    <article data-service
+             data-title="mentálhigiénés segítő beszélgetések"
+             data-tags="beszelgetes biztonságos keret tisztázás"
+             data-cats="beszelgetes"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">
+            Mentálhigiénés segítő beszélgetések
+          </h2>
+          <div class="mt-3 flex flex-wrap gap-2">
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Mentálhigiénés segítő beszélgetések">
+            Időpont
+          </a>
+
+          <a href="mentalhigienes.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+          </button>
+        </div>
+      </div>
+
+      <div id="acc-mh" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          Biztonságos, támogató tér, ahol kimondhatóvá válnak az elakadások és a belső feszültségek. Segít tisztábban látni, rendezni a gondolatokat és megtalálni a következő lépést.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha túl sok a stressz és szeretnél megkönnyebbülni</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha döntéshelyzetben vagy, és tisztábban szeretnél látni</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha ismétlődő gondolatok, szorongás vagy belső nyomás van benned</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article data-service
+             data-title="családállítás"
+             data-tags="minták rálátás kapcsolatok"
+             data-cats="beszelgetes baba"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Családállítás</h2>
+          <div class="mt-3 flex flex-wrap gap-2">
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Családállítás">
+            Időpont
+          </a>
+
+          <a href="csaladallitas.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-cs" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          Rálátást ad a mélyebb családi mintákra és ismétlődő kapcsolati helyzetekre. Segíthet oldani a láthatatlan terheket, és új irányt adni a döntéseknek.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha visszatérő párkapcsolati vagy családi nehézséget tapasztalsz</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha “mintha nem a saját életedet élnéd” érzés van benned</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha szeretnél ránézni a háttérben működő mintákra</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article data-service
+             data-title="önismereti rajz"
+             data-tags="kreatív érzések rálátás"
+             data-cats="beszelgetes"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Önismereti rajz</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Önismereti rajz">
+            Időpont
+          </a>
+
+          <a href="onismeretirajz.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+            
+        </div>
+      </div>
+
+      <div id="acc-or" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          Kreatív, finom módszer a belső folyamatok megértésére szavak nélkül is. Segít felszínre hozni érzéseket, mintákat, és új nézőpontot adni.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha nehéz szavakba önteni, mi zajlik benned</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha kíváncsi vagy a belső mintáidra és reakcióidra</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha egy gyengéd, kreatív önismereti módszert keresel</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article data-service
+             data-title="energiakezelés"
+             data-tags="harmonizálás feltöltődés egyensúly"
+             data-cats="relaxacio testi"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Energiakezelés</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Energiakezelés">
+            Időpont
+          </a>
+
+         <a href="energiakezeles.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-ek" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          Kíméletes feltöltődés és harmonizálás, amikor túl sok a feszültség és szeretnél kicsit megérkezni önmagadhoz. Segíthet visszatalálni a nyugalomhoz és a belső egyensúlyhoz.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha feszültséget, nyugtalanságot vagy kimerültséget érzel</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha szeretnél lelassulni, megpihenni és feltöltődni</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha a tested és a lelked egyszerre kér egy kis figyelmet</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 5 -->
+    <article data-service
+             data-title="hangtál terápia"
+             data-tags="hangrezgések relaxáció oldás"
+             data-cats="relaxacio testi"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Hangfürdő</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Hangtál terápia">
+            Időpont
+          </a>
+
+          <a href="hangtalterapia.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-ht" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          Mély relaxációt támogató hangrezgések, amelyek segíthetnek elengedni a feszültséget és megérkezni a testedbe. Különösen jó, ha pihenésre, lelassulásra és testi–lelki oldásra vágysz.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha nehezen tudsz ellazulni vagy túl pörgős a mindennap</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha szeretnél egy mély, pihentető relaxációt</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha testi feszültséget vagy belső nyugtalanságot érzel</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 6 -->
+    <article data-service
+             data-title="frissítő talp"
+             data-tags="élénkítő lazító gyors feltöltődés"
+             data-cats="testi"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Frissítő talp masszázs</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Frissítő talp">
+            Időpont
+          </a>
+
+          <a href="frissito-talp-masszazs.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-ft" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          Kellemesen élénkítő, lazító kezelés, ami segíthet a napi feszültség levezetésében és a közérzet javításában. Jó választás, ha fáradt vagy, és gyorsan szeretnél feltöltődni.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha fáradtságot, nehéz lábakat vagy általános kimerültséget érzel</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha szeretnél lazítani és kicsit “kikapcsolni”</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha gyors, kellemes közérzet-javító feltöltődésre vágysz</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 7 -->
+    <article data-service
+             data-title="theta healing"
+             data-tags="hiedelmek blokkok tisztulás"
+             data-cats="beszelgetes"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Theta Healing</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Theta Healing">
+            Időpont
+          </a>
+
+          <a href="theta-healing.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-th" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          A Theta Healing egy belső, fókuszált folyamat: segíthet ránézni azokra a mélyebb hiedelmekre és mintákra,
+          amelyek észrevétlenül irányítanak. Finom, kíméletes oldással tisztulhat a kép, és könnyebbé válhat a kapcsolódás önmagadhoz.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha visszatérő önszabotáló gondolatokba futsz bele</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha szeretnél elengedni régi félelmeket, belső gátakat</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha egy nyugodt, mélyebb tisztulást támogató módszert keresel</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 8 -->
+    <article data-service
+             data-title="vezetett meditációk"
+             data-tags="lelassulás légzés figyelem"
+             data-cats="relaxacio"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Vezetett meditációk</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Vezetett meditációk">
+            Időpont
+          </a>
+
+          <a href="vezetett-meditacio.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-vm" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          A vezetett meditációk segítenek visszatalálni a jelenbe — amikor szétesik a figyelem, túl sok a gondolat,
+          vagy egyszerűen csak jólesne megpihenni. A tempó kíméletes, a vezetés biztonságos: nem teljesítmény, hanem megérkezés.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha nyugtalan vagy, és nehezen áll le a “belső zaj”</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha alvás előtt szeretnél lelassulni és megérkezni</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha a légzés, testérzetek és figyelem rendezésével stabilitást keresel</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 9 -->
+    <article data-service
+             data-title="metamorf masszázs"
+             data-tags="finom érintés idegrendszer oldás"
+             data-cats="testi relaxacio"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Metamorf masszázs</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Metamorf masszázs">
+            Időpont
+          </a>
+
+          <a href="metamorf-masszazs.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+          </button>
+        </div>
+      </div>
+
+      <div id="acc-mm" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          A metamorf masszázs egy finom, nem “rádolgozós” érintéses módszer, amely a talp, a kéz és a fej területein
+          segíthet megnyugtatni az idegrendszert. Prémium, csendes tér: kevesebb zaj, több belső rendeződés.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha túlterheltnek érzed magad, és a tested is “feszülten tart”</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha kíméletes oldást szeretnél, erős inger nélkül</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha jólesne egy mélyebb megpihenés, ami után tisztább a belső tér</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 10 -->
+    <article data-service
+             data-title="babamasszázs"
+             data-tags="kötődés megnyugvás ritmus"
+             data-cats="baba testi"
+             class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                    focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-xl font-semibold tracking-tight text-white">Babamasszázs</h2>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                    transition rm:transition-none hover:bg-white/[0.07]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+             aria-label="Időpontfoglalás – Babamasszázs">
+            Időpont
+          </a>
+
+          <a href="babamasszazs.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+        </div>
+      </div>
+
+      <div id="acc-bm" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+           hidden>
+        <p class="leading-relaxed">
+          A babamasszázs gyengéd, tanulható érintéssor: segíthet a babának ellazulni, a szülőnek pedig magabiztosabban kapcsolódni.
+          A találkozó a baba jelzéseihez igazodik — nem “feladat”, inkább közös ritmus.
+        </p>
+
+        <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+        <ul class="mt-3 space-y-2 text-white/75">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha szeretnéd támogatni a megnyugvást és az esti lelassulást</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha a kötődés, érintés és közös ritmus erősítése fontos most</span></li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span><span>ha finom, kíméletes “eszközt” keresel a mindennapokhoz</span></li>
+        </ul>
+
+        <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                    transition rm:transition-none hover:bg-teal-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Időpontfoglalás
+          </a>
+          <a href="kapcsolat.html"
+             class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                    transition rm:transition-none hover:bg-white/[0.06]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+            Üzenetet írok
+          </a>
+        </div>
+      </div>
+    </article>
+
+
+
+    <!-- 11 -->
+
+  
+      <article data-service
+              data-title="kismama masszázs"
+              data-tags="várandósság tehermentesítés megnyugvás"
+              data-cats="baba testi"
+              class="serviceCard lg:col-span-4 rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)]
+                      transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.08]
+                      focus-within:ring-2 focus-within:ring-teal-300/40 rm:transform-none">
+        <div class="flex items-start justify-between gap-4">
+          <div class="min-w-0">
+            <h2 class="text-xl font-semibold tracking-tight text-white">Kismama masszázs</h2>
+          </div>
+
+          <div class="flex flex-col items-end gap-2">
+            <a href="foglalas.html"
+              class="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/85
+                      transition rm:transition-none hover:bg-white/[0.07]
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60"
+              aria-label="Időpontfoglalás – Kismama masszázs">
+              Időpont
+            </a>
+
+          <a href="kismama-masszazs.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/[0.06]">
+          Részletek
+          </a>
+          </div>
+        </div>
+
+        <div id="acc-km" class="accordion mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm text-white/75"
+            hidden>
+          <p class="leading-relaxed">
+            A kismama masszázs egy biztonságos, kíméletes kezelés a várandósság időszakában.
+            Segíthet enyhíteni a testi feszültséget, támogatni a pihenést és mélyebb nyugalmat hozni.
+            A kezelés az aktuális állapothoz igazodik — nem erőteljes, hanem megtartó és tehermentesítő.
+          </p>
+
+          <h3 class="mt-4 text-sm font-semibold text-white">Mikor lehet hasznos?</h3>
+          <ul class="mt-3 space-y-2 text-white/75">
+            <li class="flex gap-3">
+              <span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span>
+              <span>ha derék-, hát- vagy lábfeszültséget tapasztalsz</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span>
+              <span>ha nehezebb a pihenés és jól jönne egy mélyebb ellazulás</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span>
+              <span>ha a tested nagyobb terhelés alatt van a várandósság miatt</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-2 h-2 w-2 flex-none rounded-full bg-teal-300/90"></span>
+              <span>ha szeretnél tudatosan kapcsolódni önmagadhoz és a babához</span>
+            </li>
+          </ul>
+
+          <div class="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
+            <a href="foglalas.html"
+              class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-5 py-2.5 text-sm font-semibold text-[#06201b]
+                      transition rm:transition-none hover:bg-teal-200
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+              Időpontfoglalás
+            </a>
+            <a href="kapcsolat.html"
+              class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/90
+                      transition rm:transition-none hover:bg-white/[0.06]
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]">
+              Üzenetet írok
+            </a>
+          </div>
+        </div>
+      </article>
+
+  </section>
+
+  <!-- CTA -->
+  <section class="mt-10 rounded-3xl border border-white/10 bg-white/[0.06] p-8 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-8">
+        <h2 class="text-2xl font-semibold tracking-tight text-white">Kezdjük el</h2>
+        <p class="mt-2 leading-relaxed text-white/70">
+          Ha készen állsz, foglalj időpontot. Ha bizonytalan vagy, írj egy rövid üzenetet - minden kérdésedre szívesen válaszolok.
+        </p>
+      </div>
+
+      <div class="lg:col-span-4 flex flex-wrap gap-3 lg:justify-end">
+        <a href="foglalas.html"
+           class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-6 py-3 text-sm font-semibold text-[#06201b]
+                  shadow-[0_16px_40px_-22px_rgba(94,234,212,0.9)]
+                  transition rm:transition-none hover:-translate-y-0.5 hover:bg-teal-200 hover:shadow-[0_18px_50px_-24px_rgba(94,234,212,1)]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                  rm:transform-none">
+          Időpontfoglalás
+        </a>
+        <a href="kapcsolat.html"
+           class="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/90
+                  transition rm:transition-none hover:-translate-y-0.5 hover:bg-white/[0.07]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                  rm:transform-none">
+          Üzenetet írok
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+<script>
+  const logo = document.getElementById('adminTriggerLogo');
+
+  if (logo) {
+    logo.addEventListener('click', function (e) {
+      if (e.shiftKey) {
+        e.preventDefault();
+        window.location.href = "/admin-login.html";
+      }
+    });
+  }
+</script>
+
+
+  <!-- JS: FILTER + ACCORDION -->
+  <script>
+    (function () {
+      const grid = document.getElementById('servicesGrid');
+      if (!grid) return;
+
+      const cards = Array.from(grid.querySelectorAll('[data-service]'));
+      const search = document.getElementById('serviceSearch');
+      const result = document.getElementById('resultCount');
+      const chips = Array.from(document.querySelectorAll('.filterChip'));
+      const clear = document.getElementById('clearFilters');
+
+      const state = { q: '', filter: '' };
+
+      function normalize(s) {
+        return (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
+
+      function applyFilters() {
+        const q = normalize(state.q);
+        const f = normalize(state.filter);
+
+        let shown = 0;
+        cards.forEach(card => {
+          const title = normalize(card.getAttribute('data-title'));
+          const tags = normalize(card.getAttribute('data-tags'));
+          const cats = normalize(card.getAttribute('data-cats'));
+
+          const matchQ = !q || title.includes(q) || tags.includes(q) || cats.includes(q);
+          const matchF = !f || cats.split(/\s+/).includes(f);
+
+          const visible = matchQ && matchF;
+          card.classList.toggle('hidden', !visible);
+          if (visible) shown++;
+        });
+
+        if (result) {
+          result.textContent = shown === 0
+            ? 'Nincs találat a megadott keresésre / szűrőre.'
+            : `${shown} szolgáltatás megjelenítve.`;
+        }
+      }
+
+      if (search) {
+        search.addEventListener('input', (e) => {
+          state.q = e.target.value || '';
+          applyFilters();
+        });
+      }
+
+      chips.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-filter') || '';
+          state.filter = (state.filter === key) ? '' : key;
+
+          chips.forEach(b => {
+            const active = (b.getAttribute('data-filter') || '') === state.filter;
+            b.classList.toggle('bg-white/[0.10]', active);
+            b.classList.toggle('border-teal-300/30', active);
+          });
+
+          applyFilters();
+        });
+      });
+
+      if (clear) {
+        clear.addEventListener('click', () => {
+          state.q = '';
+          state.filter = '';
+          if (search) search.value = '';
+          chips.forEach(b => {
+            b.classList.remove('bg-white/[0.10]', 'border-teal-300/30');
+          });
+          applyFilters();
+        });
+      }
+
+      // Accordion
+      function closeAll(exceptId) {
+        cards.forEach(card => {
+          const btn = card.querySelector('.accordionBtn');
+          const id = btn && btn.getAttribute('data-target');
+          const panel = id ? document.getElementById(id) : null;
+          const chev = btn ? btn.querySelector('.chev') : null;
+
+          if (!btn || !panel) return;
+          if (id === exceptId) return;
+
+          btn.setAttribute('aria-expanded', 'false');
+          panel.hidden = true;
+          if (chev) chev.classList.remove('rotate-180');
+          card.classList.remove('ring-1', 'ring-teal-300/25', 'border-teal-300/25');
+        });
+      }
+
+      grid.addEventListener('click', (e) => {
+        const btn = e.target.closest('.accordionBtn');
+        if (!btn) return;
+
+        const id = btn.getAttribute('data-target');
+        const panel = id ? document.getElementById(id) : null;
+        const card = btn.closest('.serviceCard');
+        const chev = btn.querySelector('.chev');
+        if (!panel || !card) return;
+
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        closeAll(isOpen ? '' : id);
+
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        panel.hidden = isOpen;
+
+        if (chev) chev.classList.toggle('rotate-180', !isOpen);
+
+        card.classList.toggle('ring-1', !isOpen);
+        card.classList.toggle('ring-teal-300/25', !isOpen);
+        card.classList.toggle('border-teal-300/25', !isOpen);
+      });
+
+      // Initial count
+      applyFilters();
+    })();
+  </script>
+
+</main>
+
+
+  <button id="toTop" type="button" aria-label="Vissza a tetejére"
+    class="fixed bottom-5 right-5 hidden rounded-full bg-emerald-300/15 p-3 ring-1 ring-emerald-200/20 backdrop-blur hover:bg-emerald-300/25">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+      <path d="M12 5l-7 7m7-7l7 7M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    const toTop = document.getElementById('toTop');
+    function toggleToTop(){ window.scrollY > 250 ? toTop.classList.remove('hidden') : toTop.classList.add('hidden'); }
+    window.addEventListener('scroll', toggleToTop); toggleToTop();
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+
+  <!-- Aktív menü halvány -->
+  <script>
+    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('a[data-page]').forEach(a => {
+      const page = (a.getAttribute('data-page') || '').toLowerCase();
+      if (page === current) { a.classList.add('opacity-60'); a.setAttribute('aria-current', 'page'); }
+    });
+  </script>
+
+  <script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("pageLoader");
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("mobileMenuBtn");
+    const menu = document.getElementById("mobileMenu");
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+
+    // ha rákattintasz egy linkre, csukja be
+    menu.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => menu.classList.add("hidden"));
+    });
+  });
+</script>
+
+  <script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

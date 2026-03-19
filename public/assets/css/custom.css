@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700&display=swap');
+
+:root{
+  --font-main: "Lexend Deca", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Tailwind CDN felülírás ellen */
+html, body{
+  font-family: var(--font-main) !important;
+}
+
+/* Biztos öröklés mindenre (gomb, input, textarea is) */
+*{
+  font-family: inherit;
+}
+
+
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+nav a { text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+
+
+.site-bg{
+  background:
+  
+  radial-gradient(900px 500px at 50% -200px,
+  rgba(16,185,129,0.35), transparent 70%),
+
+  radial-gradient(700px 400px at 20% 50%,
+  rgba(16,185,129,0.15), transparent 70%),
+
+  radial-gradient(700px 400px at 80% 60%,
+  rgba(16,185,129,0.12), transparent 70%),
+
+  linear-gradient(
+    to bottom,
+    #012c22 0%,
+    #043c30 40%,
+    #011a15 100%
+  );
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body.site-bg{
+  position: relative;
+  background:
+    radial-gradient(900px 420px at 50% 72%, rgba(120,255,210,0.10), transparent 60%),
+    radial-gradient(700px 260px at 50% 100%, rgba(110,255,210,0.08), transparent 65%),
+    linear-gradient(to bottom, #004025 0%, #004025 38%, #004025 62%, #004025 100%);
+  overflow-x: hidden;
+}
+
+body.site-bg::before,
+body.site-bg::after{
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* alsó sötét hullámrétegek */
+body.site-bg::before{
+  height: 340px;
+  background:
+    radial-gradient(120% 140px at 12% 100%, rgba(0,0,0,0.28) 0 58%, transparent 59%),
+    radial-gradient(120% 120px at 38% 100%, rgba(0,0,0,0.20) 0 56%, transparent 57%),
+    radial-gradient(120% 135px at 68% 100%, rgba(0,0,0,0.26) 0 58%, transparent 59%),
+    radial-gradient(120% 120px at 92% 100%, rgba(0,0,0,0.22) 0 56%, transparent 57%),
+
+    radial-gradient(120% 120px at 0% 100%, #053a2c 0 58%, transparent 59%),
+    radial-gradient(120% 110px at 28% 100%, #0a5b42 0 56%, transparent 57%),
+    radial-gradient(120% 125px at 58% 100%, #084b38 0 58%, transparent 59%),
+    radial-gradient(120% 110px at 86% 100%, #0a5f45 0 56%, transparent 57%);
+  opacity: 1;
+}
+
+
+
+/* hogy a tartalom a háttér fölött maradjon */
+header,
+main,
+footer,
+#mobileMenu,
+#pageLoader,
+#cookieOverlay,
+#cookieBanner,
+#cookieModal,

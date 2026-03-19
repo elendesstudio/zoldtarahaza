@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Árlista – Zöld Tara háza</title>
+  <meta name="description" content="Árlista – Zöld Tara háza, Gargya Kriszti." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+<!-- SKELETON LOADER -->
+<div id="pageLoader" class="fixed inset-0 z-[9999] bg-emerald-950 flex items-center justify-center transition-opacity duration-500">
+
+  <div class="w-full max-w-4xl px-6 space-y-6 animate-pulse">
+
+    <div class="h-10 w-48 bg-emerald-800/50 rounded-xl"></div>
+
+    <div class="h-6 w-3/4 bg-emerald-800/40 rounded-lg"></div>
+    <div class="h-6 w-2/3 bg-emerald-800/40 rounded-lg"></div>
+
+    <div class="grid grid-cols-3 gap-4 mt-10">
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+      <div class="h-40 bg-emerald-800/40 rounded-2xl"></div>
+    </div>
+
+  </div>
+</div>
+  
+
+  <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="flex items-center justify-between">
+
+        <!-- LOGÓ balra -->
+        <a id="adminTriggerLogo" href="index.html" class="flex items-center">
+          <img
+            src="assets/img/logo.svg"
+            alt="Zöld Tara háza logó"
+            class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          />
+        </a>
+
+
+          <!-- HAMBURGER (csak mobilon látszik) -->
+  <button id="mobileMenuBtn"
+    class="ml-auto md:hidden inline-flex items-center justify-center rounded-xl p-2 bg-emerald-300/10 ring-1 ring-emerald-200/20">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+        <!-- MENÜ KÖZÉPEN -->
+        <nav class="hidden justify-center gap-2 md:flex">
+
+          <a data-page="index.html"
+             href="index.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- home -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Home
+          </a>
+
+          <a data-page="bemutatkozas.html"
+             href="bemutatkozas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- user -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Bemutatkozás
+          </a>
+
+          <a data-page="szolgaltatasok.html"
+             href="szolgaltatasok.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- grid -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Szolgáltatások
+          </a>
+
+          <a data-page="arlista.html"
+             href="arlista.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- tag -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 13l-7 7-10-10V3h7l10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M7.5 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Árlista
+          </a>
+
+          <a data-page="foglalas.html"
+             href="foglalas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M8 3v3M16 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Időpontfoglalás
+          </a>
+
+          <a data-page="kapcsolat.html"
+             href="kapcsolat.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- mail -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Kapcsolat
+          </a>
+
+
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+
+  <div id="mobileMenu"
+  class="md:hidden hidden border-b border-emerald-200/10 bg-emerald-950/95 backdrop-blur">
+
+  <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-emerald-50/90">
+    <a href="index.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Home</a>
+    <a href="bemutatkozas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Bemutatkozás</a>
+    <a href="szolgaltatasok.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Szolgáltatások</a>
+    <a href="arlista.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Árlista</a>
+    <a href="foglalas.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Időpontfoglalás</a>
+    <a href="kapcsolat.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Kapcsolat</a>
+  </div>
+</div>
+
+
+  <main class="mx-auto max-w-6xl px-4 py-14">
+    <!-- FEJLÉC -->
+    <section class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] p-8 shadow-[0_10px_40px_-25px_rgba(0,0,0,0.8)] ring-1 ring-white/5 backdrop-blur-sm md:p-10">
+      <div class="pointer-events-none absolute -inset-10 bg-gradient-to-b from-teal-300/10 via-transparent to-transparent blur-2xl"></div>
+
+      <div class="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.07] px-4 py-2 text-sm text-white/85">
+            <span class="inline-flex h-2 w-2 rounded-full bg-teal-300 shadow-[0_0_0_4px_rgba(94,234,212,0.10)]"></span>
+            <span class="font-medium tracking-tight">Áttekinthető árak, emberi ritmus</span>
+          </div>
+
+          <h1 class="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Árlista
+          </h1>
+
+          <p class="mt-4 text-emerald-50/80 leading-relaxed">
+            Az árak tájékoztató jellegűek, a pontos részleteket egyeztetéskor megbeszéljük.
+            Ha bizonytalan vagy, melyik szolgáltatás lenne a legjobb, írj nyugodtan.
+          </p>
+        </div>
+
+        <div class="flex flex-col items-start gap-3 md:items-end">
+          <a href="foglalas.html"
+             class="inline-flex items-center justify-center rounded-2xl bg-teal-300 px-6 py-3 text-sm font-semibold text-[#06201b]
+                    shadow-[0_16px_40px_-22px_rgba(94,234,212,0.9)]
+                    transition rm:transition-none hover:-translate-y-0.5 hover:bg-teal-200 hover:shadow-[0_18px_50px_-24px_rgba(94,234,212,1)]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#061a16]
+                    rm:transform-none"
+             aria-label="Időpontfoglalás">
+            Időpontfoglalás
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- KATEGÓRIÁK -->
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+
+      <!-- 1: Beszélgetések -->
+      <section class="group rounded-3xl border border-white/10 bg-emerald-950/40 p-7 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.75)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-emerald-950/50 hover:shadow-[0_16px_55px_-35px_rgba(0,0,0,0.85)] rm:transform-none">
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <h2 class="text-xl font-semibold tracking-tight text-white">Beszélgetések &amp; önismeret</h2>
+            <p class="mt-2 text-sm text-emerald-50/70">
+              
+            </p>
+          </div>
+          <span class="hidden rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75 sm:inline-flex">
+            fókusz • keret
+          </span>
+        </div>
+
+        <div class="mt-6 mx-auto max-w-[520px] space-y-4">
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Segítő beszélgetés (50 perc)</div>
+
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                12 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Családállítás (2 óra)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                18 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Önismereti rajzfoglalkozás (1,5–2 óra)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                15 000 Ft
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2: Energetikai -->
+      <section class="group rounded-3xl border border-white/10 bg-emerald-950/40 p-7 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.75)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-emerald-950/50 hover:shadow-[0_16px_55px_-35px_rgba(0,0,0,0.85)] rm:transform-none">
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <h2 class="text-xl font-semibold tracking-tight text-white">Energetikai &amp; relaxáció</h2>
+            <p class="mt-2 text-sm text-emerald-50/70">
+            </p>
+          </div>
+          <span class="hidden rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75 sm:inline-flex">
+            relax • feltöltődés
+          </span>
+        </div>
+
+        <div class="mt-6 mx-auto max-w-[520px] space-y-4">
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Hangfürdő (30 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                3 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Hangfürdő (1 óra)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                6 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Energiakezelés (30 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                5 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Theta Healing (1–1,5 óra)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                10 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Vezetett meditáció (45 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                5 000 Ft
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3: Test -->
+      <section class="group rounded-3xl border border-white/10 bg-emerald-950/40 p-7 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.75)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-emerald-950/50 hover:shadow-[0_16px_55px_-35px_rgba(0,0,0,0.85)] rm:transform-none">
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <h2 class="text-xl font-semibold tracking-tight text-white">Testkezelések</h2>
+            <p class="mt-2 text-sm text-emerald-50/70">
+            </p>
+          </div>
+          <span class="hidden rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75 sm:inline-flex">
+            testi könnyedség
+          </span>
+        </div>
+
+        <div class="mt-6 mx-auto max-w-[520px] space-y-4">
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Metamorf masszázs (30 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                4 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Metamorf masszázs (1 óra)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                8 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Frissítő talpmasszázs (30 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                4 000 Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/8"></div>
+
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Kismama masszázs (1 óra)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                10 000 Ft
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4: Baba -->
+      <section class="group rounded-3xl border border-white/10 bg-emerald-950/40 p-7 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.75)] ring-1 ring-white/5 backdrop-blur-sm transition rm:transition-none hover:-translate-y-0.5 hover:bg-emerald-950/50 hover:shadow-[0_16px_55px_-35px_rgba(0,0,0,0.85)] rm:transform-none">
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <h2 class="text-xl font-semibold tracking-tight text-white">Baba &amp; szülő támogatás</h2>
+            <p class="mt-2 text-sm text-emerald-50/70">
+            </p>
+          </div>
+          <span class="hidden rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75 sm:inline-flex">
+            család • ritmus
+          </span>
+        </div>
+
+        <div class="mt-6 mx-auto max-w-[520px] space-y-4">
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Babamasszázs (30 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                5 000 Ft
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 mx-auto max-w-[520px] space-y-4">
+          <div class="flex items-start justify-between gap-6">
+            <div class="min-w-0">
+              <div class="font-semibold text-white">Kismama masszázs (30 perc)</div>
+            </div>
+            <div class="flex flex-none items-center">
+              <span class="whitespace-nowrap rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white">
+                5 000 Ft
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Kiemelt infó -->
+    <section class="mt-10 rounded-3xl border border-white/10 bg-white/[0.04] p-7 shadow-[0_10px_40px_-28px_rgba(0,0,0,0.7)] ring-1 ring-white/5 backdrop-blur-sm">
+      <div class="flex items-start gap-4">
+        <div class="mt-1 inline-flex h-11 w-11 flex-none items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-300" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 8v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 16h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <path d="M10.3 4.3h3.4a2 2 0 0 1 1.8 1.1l1.7 3.4a2 2 0 0 1 0 1.8l-1.7 3.4a2 2 0 0 1-1.8 1.1h-3.4a2 2 0 0 1-1.8-1.1L6.8 10.6a2 2 0 0 1 0-1.8l1.7-3.4a2 2 0 0 1 1.8-1.1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="min-w-0">
+          <h2 class="text-lg font-semibold tracking-tight text-white">Lemondás / módosítás</h2>
+          <p class="mt-2 text-sm text-emerald-50/75 leading-relaxed">
+            Kérlek, az időpont lemondását vagy módosítását legalább 24 órával korábban jelezd, hogy másnak is lehetőséget tudjak adni.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Up gomb -->
+  <button id="toTop" type="button" aria-label="Vissza a tetejére"
+    class="fixed bottom-5 right-5 hidden rounded-full bg-emerald-300/15 p-3 ring-1 ring-emerald-200/20 backdrop-blur hover:bg-emerald-300/25">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+      <path d="M12 5l-7 7m7-7l7 7M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+
+  <script>
+  const logo = document.getElementById('adminTriggerLogo');
+
+  if (logo) {
+    logo.addEventListener('click', function (e) {
+      if (e.shiftKey) {
+        e.preventDefault();
+        window.location.href = "/admin-login.html";
+      }
+    });
+  }
+</script>
+
+
+  <script>
+    const toTop = document.getElementById('toTop');
+    function toggleToTop(){ window.scrollY > 250 ? toTop.classList.remove('hidden') : toTop.classList.add('hidden'); }
+    window.addEventListener('scroll', toggleToTop); toggleToTop();
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+
+  <!-- Aktív menü halvány -->
+  <script>
+    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('a[data-page]').forEach(a => {
+      const page = (a.getAttribute('data-page') || '').toLowerCase();
+      if (page === current) { a.classList.add('opacity-60'); a.setAttribute('aria-current', 'page'); }
+    });
+  </script>
+
+
+  <script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("pageLoader");
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("mobileMenuBtn");
+    const menu = document.getElementById("mobileMenu");
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+
+    // ha rákattintasz egy linkre, csukja be
+    menu.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => menu.classList.add("hidden"));
+    });
+  });
+</script>
+
+  <script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

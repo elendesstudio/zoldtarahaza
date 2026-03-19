@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Adatkezelési tájékoztató – Zöld Tara háza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+<body class="min-h-screen text-emerald-50 bg-gradient-to-b from-emerald-950 via-emerald-900/40 to-teal-950">
+
+
+  <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="grid items-center gap-3 md:grid-cols-[auto_1fr]">
+  
+        <!-- LOGÓ balra -->
+        <a href="index.html" class="flex items-center">
+          <img
+            src="assets/img/logo.svg"
+            alt="Zöld Tara háza logó"
+            class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          />
+        </a>
+  
+        <!-- MENÜ KÖZÉPEN -->
+        <nav class="hidden justify-center gap-2 md:flex">
+  
+          <a data-page="index.html"
+             href="index.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- home -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Home
+          </a>
+  
+          <a data-page="bemutatkozas.html"
+             href="bemutatkozas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- user -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Bemutatkozás
+          </a>
+  
+          <a data-page="szolgaltatasok.html"
+             href="szolgaltatasok.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- grid -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Szolgáltatások
+          </a>
+  
+          <a data-page="arlista.html"
+             href="arlista.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- tag -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 13l-7 7-10-10V3h7l10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M7.5 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Árlista
+          </a>
+  
+          <a data-page="foglalas.html"
+             href="foglalas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M8 3v3M16 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Időpontfoglalás
+          </a>
+  
+          <a data-page="kapcsolat.html"
+             href="kapcsolat.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- mail -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Kapcsolat
+          </a>
+  
+          <a data-page="admin-login.html"
+            href="admin-login.html"
+            class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- lock -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M6 10V8a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <rect x="4" y="10" width="16" height="10" rx="2"
+                  stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Admin
+          </a>
+  
+        </nav>
+  
+      </div>
+    </div>
+  </header>
+  
+
+  <main class="mx-auto max-w-6xl px-4 py-14">
+
+  <h1 class="text-3xl font-semibold">Adatkezelési tájékoztató</h1>
+
+  <div class="mt-6 max-w-4xl space-y-6 text-emerald-100/80 leading-relaxed">
+
+    <p>
+      A Zöld Tara háza weboldal (a továbbiakban: Weboldal) üzemeltetése során a látogatók személyes adatainak
+      kezelésére kizárólag kapcsolatfelvétel és időpont-egyeztetés céljából kerül sor.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">1. Adatkezelő adatai</h2>
+    <ul class="list-disc pl-6">
+      <li><span class="text-emerald-50 font-semibold">Adatkezelő:</span> Gargya Krisztina</li>
+      <li><span class="text-emerald-50 font-semibold">Weboldal:</span> Zöld Tara háza</li>
+      <li>
+        <span class="text-emerald-50 font-semibold">Kapcsolat:</span>
+        <a class="underline hover:opacity-70" href="mailto:zoldtarahaza@gmail.com">zoldtarahaza@gmail.com</a>
+      </li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-emerald-50">2. Milyen adatokat kezelünk?</h2>
+    <p>A Weboldalon keresztül az alábbi adatok megadása történhet:</p>
+    <ul class="list-disc pl-6">
+      <li><span class="text-emerald-50 font-semibold">Kapcsolatfelvétel:</span> név, e-mail cím, üzenet szövege</li>
+      <li>
+        <span class="text-emerald-50 font-semibold">Időpontfoglalás / egyeztetés:</span>
+        név, e-mail cím, (opcionálisan) telefonszám, választott szolgáltatás és időpont
+      </li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-emerald-50">3. Az adatkezelés célja</h2>
+    <ul class="list-disc pl-6">
+      <li>kapcsolatfelvétel biztosítása, megkeresések megválaszolása,</li>
+      <li>időpont egyeztetése, foglalással kapcsolatos kommunikáció,</li>
+      <li>szükség esetén a szolgáltatással kapcsolatos egyeztetés.</li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-emerald-50">4. Az adatkezelés jogalapja</h2>
+    <p>
+      Az adatkezelés jogalapja az érintett önkéntes hozzájárulása, amelyet az űrlap elküldésével,
+      illetve az időpont-egyeztetés kezdeményezésével ad meg.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">5. Az adatkezelés időtartama</h2>
+    <p>
+      A megadott adatokat a kapcsolatfelvétel vagy időpont-egyeztetés lezárásáig kezeljük,
+      illetve legkésőbb addig, amíg az érintett a törlését nem kéri. Amennyiben jogszabályi
+      kötelezettség hosszabb megőrzési időt ír elő, úgy az adatkezelés ennek megfelelően történik.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">6. Ki fér hozzá az adatokhoz?</h2>
+    <p>
+      A megadott adatokhoz kizárólag az adatkezelő fér hozzá. Az adatok harmadik fél részére
+      nem kerülnek átadásra, kivéve, ha azt jogszabály kötelezővé teszi.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">7. Adatbiztonság</h2>
+    <p>
+      Az adatkezelő megfelelő technikai és szervezési intézkedéseket alkalmaz annak érdekében,
+      hogy a kezelt adatokhoz illetéktelenek ne férhessenek hozzá, illetve azok ne sérüljenek,
+      ne vesszenek el, és ne kerüljenek jogosulatlan nyilvánosságra.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">8. Az érintettek jogai</h2>
+    <p>Az érintett jogosult különösen:</p>
+    <ul class="list-disc pl-6">
+      <li>tájékoztatást kérni a személyes adatai kezeléséről,</li>
+      <li>hozzáférést kérni a kezelt adataihoz,</li>
+      <li>kérni azok helyesbítését,</li>
+      <li>kérni törlésüket,</li>
+      <li>kérni az adatkezelés korlátozását,</li>
+      <li>hozzájárulását bármikor visszavonni (a visszavonás a korábbi adatkezelés jogszerűségét nem érinti).</li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-emerald-50">9. Jogorvoslat</h2>
+    <p>
+      Amennyiben az érintett úgy véli, hogy a személyes adatai kezelése során jogsérelem érte,
+      panaszt tehet a Nemzeti Adatvédelmi és Információszabadság Hatóságnál (NAIH), illetve
+      bírósághoz fordulhat.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">10. A tájékoztató módosítása</h2>
+    <p>
+      Az adatkezelő fenntartja a jogot, hogy a jelen adatkezelési tájékoztatót bármikor módosítsa.
+      Az aktuális verzió mindig ezen az oldalon érhető el.
+    </p>
+
+    <div class="rounded-3xl border border-emerald-200/10 bg-emerald-950/50 p-5">
+      <p class="text-sm text-emerald-100/80">
+        Kapcsolatfelvétel: <a class="underline hover:opacity-70" href="kapcsolat.html">Kapcsolat</a> •
+        Sütikezelés: <a class="underline hover:opacity-70" href="sutikezeles.html">Sütikezelési tájékoztató</a>
+      </p>
+    </div>
+
+  </div>
+</main>
+
+  <script>
+    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('a[data-page]').forEach(a => {
+      const page = (a.getAttribute('data-page') || '').toLowerCase();
+      if (page === current) {
+        a.classList.add('opacity-60');
+        a.setAttribute('aria-current', 'page');
+      }
+    });
+  </script>
+  
+  <script src="assets/js/cookie.js"></script>
+
+</body>
+</html>

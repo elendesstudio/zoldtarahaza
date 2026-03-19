@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sütikezelés – Zöld Tara háza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
+</head>
+<body class="min-h-screen text-emerald-50 bg-gradient-to-b from-emerald-950 via-emerald-900/40 to-teal-950">
+
+
+  <header class="sticky top-0 z-50 border-b border-emerald-200/10 bg-emerald-950/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="grid items-center gap-3 md:grid-cols-[auto_1fr]">
+  
+        <!-- LOGÓ balra -->
+        <a href="index.html" class="flex items-center">
+          <img
+            src="assets/img/logo.svg"
+            alt="Zöld Tara háza logó"
+            class="h-16 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          />
+        </a>
+  
+        <!-- MENÜ KÖZÉPEN -->
+        <nav class="hidden justify-center gap-2 md:flex">
+  
+          <a data-page="index.html"
+             href="index.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- home -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Home
+          </a>
+  
+          <a data-page="bemutatkozas.html"
+             href="bemutatkozas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- user -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Bemutatkozás
+          </a>
+  
+          <a data-page="szolgaltatasok.html"
+             href="szolgaltatasok.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- grid -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Szolgáltatások
+          </a>
+  
+          <a data-page="arlista.html"
+             href="arlista.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- tag -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M20 13l-7 7-10-10V3h7l10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M7.5 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Árlista
+          </a>
+  
+          <a data-page="foglalas.html"
+             href="foglalas.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M8 3v3M16 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Időpontfoglalás
+          </a>
+  
+          <a data-page="kapcsolat.html"
+             href="kapcsolat.html"
+             class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- mail -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Kapcsolat
+          </a>
+  
+          <a data-page="admin-login.html"
+            href="admin-login.html"
+            class="inline-flex items-center gap-2 rounded-2xl bg-emerald-300/10 px-4 py-2 text-sm text-emerald-50/90 ring-1 ring-emerald-200/15 transition hover:opacity-70 hover:bg-emerald-300/15">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-300/10 ring-1 ring-emerald-200/15">
+              <!-- lock -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <path d="M6 10V8a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <rect x="4" y="10" width="16" height="10" rx="2"
+                  stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            Admin
+          </a>
+  
+        </nav>
+  
+      </div>
+    </div>
+  </header>
+  
+
+  <main class="mx-auto max-w-6xl px-4 py-14">
+
+  <h1 class="text-3xl font-semibold">Sütikezelési tájékoztató</h1>
+
+  <div class="mt-6 max-w-4xl space-y-6 text-emerald-100/80 leading-relaxed">
+
+    <p>
+      A Zöld Tara háza weboldal (a továbbiakban: Weboldal) sütiket (cookie-kat) használ
+      a megfelelő működés biztosítása és a felhasználói élmény javítása érdekében.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">Mi az a süti (cookie)?</h2>
+    <p>
+      A süti egy kis adatfájl, amelyet a Weboldal helyez el a látogató számítógépén vagy
+      mobil eszközén. A sütik önmagukban nem alkalmasak a látogató személyazonosítására,
+      és nem tartalmaznak személyes adatokat.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">Milyen sütiket használunk?</h2>
+
+    <h3 class="font-semibold text-emerald-50">1. Működéshez szükséges sütik</h3>
+    <p>
+      Ezek a sütik elengedhetetlenek a Weboldal megfelelő működéséhez, például:
+    </p>
+    <ul class="list-disc pl-6">
+      <li>az oldal biztonságos megjelenítéséhez,</li>
+      <li>a navigációhoz,</li>
+      <li>az alapfunkciók használatához.</li>
+    </ul>
+    <p>
+      Ezek használatához nem szükséges a látogató külön hozzájárulása.
+    </p>
+
+    <h3 class="font-semibold text-emerald-50">
+      2. Statisztikai / analitikai sütik (ha később alkalmazásra kerülnek)
+    </h3>
+    <p>
+      A Weboldal a jövőben használhat statisztikai célú sütiket a látogatottság elemzésére.
+      Ezek a sütik nem alkalmasak személyes azonosításra, kizárólag összesített adatokat
+      gyűjtenek.
+    </p>
+    <p>
+      Az ilyen sütik használata kizárólag a látogató előzetes hozzájárulásával történik.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">A sütik kezelése</h2>
+    <p>
+      A látogató jogosult a sütik használatát elfogadni vagy elutasítani, valamint a
+      korábban elmentett sütiket bármikor törölheti a böngésző beállításaiban.
+    </p>
+
+    <p>
+      A legtöbb böngésző lehetőséget biztosít a sütik kezelésére az alábbi módokon:
+      Google Chrome, Mozilla Firefox, Microsoft Edge, Safari.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">Sütik letiltása</h2>
+    <p>
+      A sütik letiltása esetén előfordulhat, hogy a Weboldal egyes funkciói nem vagy csak
+      korlátozottan működnek.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">Kapcsolat</h2>
+    <p>
+      Amennyiben a sütikezeléssel kapcsolatban kérdés merül fel, kérjük, vedd fel velünk
+      a kapcsolatot a
+      <a href="kapcsolat.html" class="underline hover:opacity-70">Kapcsolat</a>
+      oldalon.
+    </p>
+
+    <h2 class="text-xl font-semibold text-emerald-50">A tájékoztató módosítása</h2>
+    <p>
+      A Weboldal fenntartja a jogot, hogy a jelen sütikezelési tájékoztatót bármikor
+      módosítsa. Az aktuális verzió mindig ezen az oldalon érhető el.
+    </p>
+
+    <div class="mt-10 rounded-3xl border border-emerald-200/10 bg-emerald-950/50 px-6 py-4">
+  <p class="text-sm text-emerald-100/80">
+    Kapcsolatfelvétel:
+    <a href="kapcsolat.html" class="underline hover:opacity-70">Kapcsolat</a>
+    •
+    Adatkezelés:
+    <a href="adatkezeles.html" class="underline hover:opacity-70">Adatkezelési tájékoztató</a>
+    
+  </p>
+</div>
+
+  </div>
+
+</main>
+
+
+  <script>
+    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('a[data-page]').forEach(a => {
+      const page = (a.getAttribute('data-page') || '').toLowerCase();
+      if (page === current) {
+        a.classList.add('opacity-60');
+        a.setAttribute('aria-current', 'page');
+      }
+    });
+  </script>
+  
+  <script src="assets/js/cookie.js"></script>
+
+</body>
+</html>
