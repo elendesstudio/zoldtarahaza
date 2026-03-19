@@ -11,7 +11,12 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/logokicsi.svg">
 </head>
 
-<!-- COOKIE OVERLAY -->
+
+
+<body class="site-bg min-h-screen text-emerald-50">
+
+
+  <!-- COOKIE OVERLAY -->
 <div id="cookieOverlay"
      class="fixed inset-0 z-[90] hidden bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
 </div>
@@ -91,9 +96,6 @@
 
   </div>
 </div>
-
-<body class="site-bg min-h-screen text-emerald-50">
-
 
 <!-- SKELETON LOADER -->
 <div id="pageLoader" class="fixed inset-0 z-[9999] bg-emerald-950 flex items-center justify-center transition-opacity duration-500">
@@ -232,7 +234,7 @@
   </header>
   
   <div id="mobileMenu"
-    class="md:hidden hidden border-b border-emerald-200/10 bg-emerald-950/95 backdrop-blur">
+    class="md:hidden hidden fixed top-0 left-0 w-full h-screen bg-emerald-950 z-50 flex flex-col">
 
     <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-emerald-50/90">
       <a href="index.html" class="rounded-xl px-3 py-2 hover:bg-emerald-300/10">Home</a>
