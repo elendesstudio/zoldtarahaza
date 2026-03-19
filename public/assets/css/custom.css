@@ -90,14 +90,6 @@ body.site-bg::before{
 
 
 /* hogy a tartalom a háttér fölött maradjon */
-header,
-main,
-footer,
-#mobileMenu,
-#pageLoader,
-#cookieOverlay,
-#cookieBanner,
-#cookieModal,
 #mobileMenu {
   position: fixed;
   top: 0;
@@ -107,4 +99,25 @@ footer,
   background: #004025;
   z-index: 9999;
   overflow-y: auto;
+}
+
+#pageLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+#cookieOverlay,
+#cookieModal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+#cookieBanner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
