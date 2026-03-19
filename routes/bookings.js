@@ -105,18 +105,18 @@ router.post("/", async (req, res) => {
         VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmed', ?)
         `,
         [serviceId, date, slot, name.trim(), phone.trim(), email.trim(), note || null, cancelToken],
-        async function (insertErr) {
+        function (insertErr) {
 
-          if (insertErr) {
-            if (String(insertErr.message).includes("UNIQUE")) {
-              return res.status(409).json({ error: "Ez az idősáv már foglalt" });
-            }
-            return res.status(500).json({ error: "Adatbázis hiba" });
-          }
+  if (insertErr) {
+    if (String(insertErr.message).includes("UNIQUE")) {
+      return res.status(409).json({ error: "Ez az idősáv már foglalt" });
+    }
+    return res.status(500).json({ error: "Adatbázis hiba" });
+  }
 
-          const cancelLink = `${process.env.BASE_URL}/lemondas.html?token=${cancelToken}`;
+  const cancelLink = `${process.env.BASE_URL}/lemondas.html?token=${cancelToken}`;
 
-          const adminText = `Új foglalás érkezett
+  const adminText = `Új foglalás érkezett
 
 Szolgáltatás: ${service.name}
 Dátum: ${date}
@@ -129,49 +129,54 @@ Email: ${email}
 Megjegyzés:
 ${note || "-"}`;
 
-          const userHtml = `
-          <h2>Kedves ${name}!</h2>
-          <p>Sikeresen lefoglaltad az időpontot.</p>
-          <p><b>Dátum:</b> ${date}<br><b>Idősáv:</b> ${slot}</p>
-          <p><a href="${cancelLink}">Lemondás</a></p>
-          `;
+  const userHtml = `
+  <h2>Kedves ${name}!</h2>
+  <p>Sikeresen lefoglaltad az időpontot.</p>
+  <p><b>Dátum:</b> ${date}<br><b>Idősáv:</b> ${slot}</p>
+  <p><a href="${cancelLink}">Lemondás</a></p>
+  `;
 
-          const userText = `Kedves ${name}!
+  const userText = `Kedves ${name}!
 
 Dátum: ${date}
 Idősáv: ${slot}`;
 
-          try {
-            console.log("EMAIL KÜLDÉS INDUL");
+  // ✅ AZONNALI RESPONSE
+  res.status(201).json({
+    ok: true,
+    bookingId: this.lastID,
+  });
 
-            await sendMail({
-              to: process.env.OWNER_EMAIL,
-              subject: "Új időpontfoglalás",
-              text: adminText,
-            });
+  // ✅ EMAIL KÜLDÉS HÁTTÉRBEN
+  (async () => {
+    try {
+      console.log("EMAIL KÜLDÉS INDUL");
 
-            await sendMail({
-              to: email,
-              subject: "Időpontfoglalás visszaigazolás",
-              text: userText,
-              html: userHtml,
-            });
+      await sendMail({
+        to: process.env.OWNER_EMAIL,
+        subject: "Új időpontfoglalás",
+        text: adminText,
+      });
 
-            console.log("EMAIL ELKÜLDVE");
+      await sendMail({
+        to: email,
+        subject: "Időpontfoglalás visszaigazolás",
+        text: userText,
+        html: userHtml,
+      });
 
-          } catch (err) {
-            console.error("EMAIL HIBA:", err);
-          }
+      console.log("EMAIL ELKÜLDVE");
 
-          return res.status(201).json({
-            ok: true,
-            bookingId: this.lastID,
-          });
-        }
-      );
+    } catch (err) {
+      console.error("EMAIL HIBA:", err);
     }
-  );
-});
+  })();
+}
+
+); // db.run lezárás
+} // db.get callback vége
+); // db.get lezárás
+}); // router.post lezárás
 
 
 // ===== CANCEL =====
