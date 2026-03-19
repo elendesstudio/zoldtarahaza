@@ -48,6 +48,7 @@ nav a:hover { text-decoration: underline; }
 html, body {
   min-height: 100vh;
   background-color: #004025;
+  overflow-x: hidden;
 }
 
 body.site-bg{
