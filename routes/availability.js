@@ -185,9 +185,16 @@ router.get("/slots", (req, res) => {
           const booked = new Set(rows.map(r => r.slot));
 
           // napi slot felülírás: ha nincs sor a slotra, akkor alapból true
+          const now = new Date();
+
           const slots = TIME_SLOTS.map((slot) => {
             const enabledByAdmin = ov.dailySlots.has(slot) ? ov.dailySlots.get(slot) : true;
-            const available = enabledByAdmin && !booked.has(slot);
+
+            const slotStart = new Date(`${date}T${slot.split("-")[0]}:00`);
+            const isPast = slotStart <= now;
+
+            const available = enabledByAdmin && !booked.has(slot) && !isPast;
+
             return { slot, available };
           });
 

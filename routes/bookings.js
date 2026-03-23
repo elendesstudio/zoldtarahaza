@@ -99,6 +99,7 @@ router.post("/", (req, res) => {
       error: "Ez az időpont már elmúlt",
     });
   }
+  
   db.get(
     "SELECT id, name FROM services WHERE id = ?",
     [serviceId],
