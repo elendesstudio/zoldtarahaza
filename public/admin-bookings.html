@@ -145,7 +145,10 @@ table.innerHTML="";
 data.forEach(b=>{
 
 const row=document.createElement("tr");
-row.className="border-b border-white/10";
+row.setAttribute("data-id", b.id);
+row.className = b.deleted == 1
+  ? "border-b border-white/10 opacity-60"
+  : "border-b border-white/10";
 
 row.innerHTML=`
 
@@ -218,6 +221,17 @@ loadBookings(currentFilter);
         await fetch(`/api/admin/bookings/${id}`, {
             method:"DELETE"
         });
+
+        if(currentFilter === "all"){
+            const row = document.querySelector(`[data-id="${id}"]`);
+            if(row){
+            row.classList.add("bg-red-500/20");
+            setTimeout(() => {
+                loadBookings(currentFilter);
+            }, 300);
+            return;
+            }
+        }
 
         loadBookings(currentFilter);
         }
