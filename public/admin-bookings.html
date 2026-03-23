@@ -209,20 +209,18 @@ await checkAdmin();
 loadBookings(currentFilter);
 })();
 
-</script>
-
-<script>
 async function deleteBooking(id){
-
   if(!confirm("Biztos törlöd ezt a foglalást?")) return;
 
   await fetch(`/api/admin/bookings/${id}`, {
     method:"DELETE"
   });
 
-  // 🔥 FORCE HARD REFRESH (cache nélkül)
   window.location.href = window.location.pathname + "?t=" + Date.now();
 }
+
 </script>
+
+
 </body>
 </html>
