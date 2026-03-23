@@ -320,28 +320,17 @@ app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
     `,
     [bookingId],
     (err, booking) => {
-      if (err) {
-        return res.status(500).json({ error: "Adatbázis hiba" });
-      }
-
-      if (!booking) {
-        return res.status(404).json({ error: "Foglalás nem található" });
-      }
+      if (err) return res.status(500).json({ error: "Adatbázis hiba" });
+      if (!booking) return res.status(404).json({ error: "Foglalás nem található" });
 
       db.run(
         "UPDATE bookings SET deleted = 1 WHERE id = ?",
         [bookingId],
-        function (err) {
-          if (err) {
-            return res.status(500).json({ error: "Törlés hiba" });
-          }
+        async function (err) {
+          if (err) return res.status(500).json({ error: "Törlés hiba" });
 
-          // Először válasz a frontendnek
-          res.json({ success: true });
-
-          // Email külön, háttérben
-          (async () => {
-            try {
+          try {
+            if (booking.email) {
               await transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to: booking.email,
@@ -359,10 +348,16 @@ Ha kérdésed van, válaszolj erre az emailre.
 Üdvözlettel,
 Zöld Tara háza`
               });
-            } catch (emailErr) {
-              console.error("Email hiba:", emailErr);
+
+              console.log("EMAIL ELKÜLDVE:", booking.email);
+            } else {
+              console.log("NINCS EMAIL A FOGLALÁSBAN");
             }
-          })();
+          } catch (emailErr) {
+            console.error("EMAIL HIBA:", emailErr);
+          }
+
+          res.json({ success: true });
         }
       );
     }
