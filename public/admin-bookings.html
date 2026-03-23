@@ -113,6 +113,7 @@ class="divide-y divide-white/10"></tbody>
 
 
 <script>
+let currentFilter = "all";
 
 async function checkAdmin(){
 const r = await fetch("/admin/check");
@@ -127,6 +128,8 @@ location.href="/admin-login.html";
 
 
 async function loadBookings(filter){
+
+currentFilter = filter;
 
 let url="/api/admin/bookings-all";
 
@@ -193,14 +196,14 @@ await fetch(`/api/admin/bookings/${id}/restore`,{
 method:"POST"
 });
 
-loadBookings("all");
+loadBookings(currentFilter);
 
 }
 
 
 (async function init(){
 await checkAdmin();
-loadBookings("all");
+loadBookings(currentFilter);
 })();
 
 </script>
@@ -216,7 +219,7 @@ loadBookings("all");
             method:"DELETE"
         });
 
-        loadBookings("all");
+        loadBookings(currentFilter);
         }
     </script>
 </body>
