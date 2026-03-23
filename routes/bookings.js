@@ -99,7 +99,7 @@ router.post("/", (req, res) => {
       error: "Ez az időpont már elmúlt",
     });
   }
-  
+
   db.get(
     "SELECT id, name FROM services WHERE id = ?",
     [serviceId],
@@ -338,5 +338,91 @@ router.get("/cancel-info", (req, res) => {
     }
   );
 });
+
+// ===== ADMIN – ALL BOOKINGS (FILTER) =====
+router.get("/admin/bookings-all", (req, res) => {
+  const filter = req.query.filter;
+
+  let where = "";
+
+  if (filter === "active") {
+    where = "WHERE bookings.status = 'confirmed'";
+  }
+
+  if (filter === "deleted") {
+    where = "WHERE bookings.status != 'confirmed'";
+  }
+
+  db.all(`
+    SELECT 
+      bookings.*,
+      services.name AS service_name
+    FROM bookings
+    JOIN services ON bookings.service_id = services.id
+    ${where}
+    ORDER BY bookings.date DESC, bookings.slot DESC
+  `, [], (err, rows) => {
+
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+
+  });
+});
+
+// ===== ADMIN DELETE =====
+router.delete("/admin/bookings/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.get(`
+    SELECT b.*, s.name as service_name
+    FROM bookings b
+    LEFT JOIN services s ON s.id = b.service_id
+    WHERE b.id = ?
+  `, [id], async (err, booking) => {
+
+    if (err) return res.status(500).json({ error: "Adatbázis hiba" });
+    if (!booking) return res.status(404).json({ error: "Nem található" });
+
+    db.run(`
+      UPDATE bookings
+      SET status = 'cancelled_by_admin'
+      WHERE id = ?
+    `, [id], async function () {
+
+      try {
+        if (booking.email) {
+          await sendMail({
+            to: booking.email,
+            subject: "Időpont törölve",
+            html: `
+              <p>Kedves ${booking.name || "Vendég"}!</p>
+              <p>Az időpontod törlésre került:</p>
+              <p><strong>${booking.date} - ${booking.slot}</strong></p>
+            `
+          });
+        }
+      } catch (e) {
+        console.error("EMAIL HIBA:", e);
+      }
+
+      res.json({ ok: true });
+    });
+
+  });
+});
+
+// ===== ADMIN RESTORE =====
+router.post("/admin/bookings/:id/restore", (req, res) => {
+  const id = req.params.id;
+
+  db.run(`
+    UPDATE bookings
+    SET status = 'confirmed'
+    WHERE id = ?
+  `, [id], function () {
+    res.json({ ok: true });
+  });
+});
+
 
 module.exports = router;

@@ -156,9 +156,12 @@ row.innerHTML=`
 
 <td class="p-3">
 
-${b.deleted==1
-? '<span class="px-2 py-1 rounded bg-red-600/40 text-xs">törölt</span>'
-: '<span class="px-2 py-1 rounded bg-emerald-600/40 text-xs">aktív</span>'}
+${b.status !== "confirmed"
+? `<button onclick="restore(${b.id})"
+class="px-4 py-2 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 text-xs font-semibold whitespace-nowrap">
+Újraaktiválás
+</button>`
+: ''}
 
 </td>
 
