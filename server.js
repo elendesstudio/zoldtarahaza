@@ -6,17 +6,6 @@ require("./db/init");
 
 const db = require("./db/database");
 
-
-
-db.run(`
-  UPDATE bookings
-  SET deleted = 0
-  WHERE deleted IS NULL OR deleted = 1
-`, (err) => {
-  if (err) console.error("DB FIX ERROR:", err);
-  else console.log("DB FIX OK");
-});
-
 // =====================================================
 // ADD SOFT DELETE FIELD
 // =====================================================
