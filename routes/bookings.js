@@ -134,6 +134,64 @@ ${note || "-"}`;
 Dátum: ${date}
 Idősáv: ${slot}`;
 
+const userHtml = `
+<div style="margin:0;padding:0;background:#e9f3ef;padding:40px 10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center">
+
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+
+          <!-- HEADER -->
+          <tr>
+            <td style="background:#0f3f2f;color:#ffffff;padding:30px;text-align:center;">
+              <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">
+                Időpont visszaigazolás
+              </div>
+              <h1 style="margin:10px 0 0 0;font-size:22px;">
+                Zöld Tara háza
+              </h1>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="padding:30px;color:#2f3e38;">
+
+              <h2 style="margin-top:0;">Kedves ${name}!</h2>
+
+              <p>Örömmel visszaigazoljuk a foglalásodat.</p>
+
+              <div style="background:#f5f9f7;border-radius:10px;padding:20px;margin:20px 0;">
+                <strong>Szolgáltatás:</strong> ${service.name}<br>
+                <strong>Dátum:</strong> ${date}<br>
+                <strong>Időpont:</strong> ${slot}
+              </div>
+
+              <div style="margin-top:20px;">
+                <a href="${cancelLink}" style="background:#0f3f2f;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;">
+                  Időpont lemondása
+                </a>
+              </div>
+
+              <p style="margin-top:30px;">
+                Szeretettel,<br>
+                <strong>Zöld Tara háza</strong>
+              </p>
+
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</div>
+`;
+
           // ✅ AZONNALI RESPONSE
           res.status(201).json({
             ok: true,
@@ -159,6 +217,7 @@ Idősáv: ${slot}`;
                 to: email,
                 subject: "Időpontfoglalás visszaigazolás",
                 text: userText,
+                html: userHtml,
               });
 
               console.log("EMAIL ELKÜLDVE");
