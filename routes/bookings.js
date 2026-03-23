@@ -143,6 +143,10 @@ Idősáv: ${slot}`;
           // ✅ EMAIL HÁTTÉRBEN
           (async () => {
             try {
+
+              console.log("SMTP USER:", process.env.EMAIL_USER);
+              console.log("SMTP PASS:", process.env.EMAIL_PASS ? "OK" : "HIÁNYZIK");
+
               console.log("EMAIL KÜLDÉS INDUL");
 
               await sendMail({
@@ -160,7 +164,8 @@ Idősáv: ${slot}`;
               console.log("EMAIL ELKÜLDVE");
 
             } catch (err) {
-              console.error("EMAIL HIBA:", err);
+              console.error("EMAIL HIBA FULL:", err);
+              console.error("STACK:", err?.stack);
             }
           })();
         }
