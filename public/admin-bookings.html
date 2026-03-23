@@ -195,12 +195,16 @@ table.appendChild(row);
 
 async function restore(id){
 
-await fetch(`/api/admin/bookings/${id}/restore`,{
-method:"POST"
-});
+  await fetch(`/api/admin/bookings/${id}/restore`,{
+    method:"POST"
+  });
 
-loadBookings(currentFilter);
+  if(currentFilter === "all"){
+    location.reload();
+    return;
+  }
 
+  loadBookings(currentFilter);
 }
 
 
@@ -214,27 +218,22 @@ loadBookings(currentFilter);
 <script src="assets/js/cookie.js"></script>
 
     <script>
-        async function deleteBooking(id){
+async function deleteBooking(id){
 
-        if(!confirm("Biztos törlöd ezt a foglalást?")) return;
+  if(!confirm("Biztos törlöd ezt a foglalást?")) return;
 
-        await fetch(`/api/admin/bookings/${id}`, {
-            method:"DELETE"
-        });
+  await fetch(`/api/admin/bookings/${id}`, {
+    method:"DELETE"
+  });
 
-        if(currentFilter === "all"){
-            const row = document.querySelector(`[data-id="${id}"]`);
-            if(row){
-            row.classList.add("bg-red-500/20");
-            setTimeout(() => {
-                loadBookings(currentFilter);
-            }, 300);
-            return;
-            }
-        }
+  // 🔥 ha "összes" nézet
+  if(currentFilter === "all"){
+    location.reload();
+    return;
+  }
 
-        loadBookings(currentFilter);
-        }
-    </script>
+  loadBookings(currentFilter);
+}
+</script>
 </body>
 </html>
