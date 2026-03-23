@@ -307,12 +307,22 @@ router.get("/cancel-info", (req, res) => {
       if (err) return res.status(500).json({ error: "Adatbázis hiba" });
       if (!booking) return res.status(404).json({ error: "Foglalás nem található" });
 
+      const bookingDate = new Date(booking.date);
+      const nowDate = new Date();
+
+      bookingDate.setHours(0,0,0,0);
+      nowDate.setHours(0,0,0,0);
+
+      const cancellable =
+        booking.status === "confirmed" && bookingDate > nowDate;
+
       res.json({
         booking: {
           serviceName: booking.service_name,
           date: booking.date,
           slot: booking.slot,
-          status: booking.status
+          status: booking.status,
+          cancellable
         }
       });
     }
