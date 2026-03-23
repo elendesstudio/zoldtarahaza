@@ -199,12 +199,8 @@ async function restore(id){
     method:"POST"
   });
 
-  if(currentFilter === "all"){
-    location.reload();
-    return;
-  }
-
-  loadBookings(currentFilter);
+  // 🔥 FORCE HARD REFRESH
+  window.location.href = window.location.pathname + "?t=" + Date.now();
 }
 
 
@@ -215,9 +211,7 @@ loadBookings(currentFilter);
 
 </script>
 
-<script src="assets/js/cookie.js"></script>
-
-    <script>
+<script>
 async function deleteBooking(id){
 
   if(!confirm("Biztos törlöd ezt a foglalást?")) return;
@@ -226,13 +220,8 @@ async function deleteBooking(id){
     method:"DELETE"
   });
 
-  // 🔥 ha "összes" nézet
-  if(currentFilter === "all"){
-    location.reload();
-    return;
-  }
-
-  loadBookings(currentFilter);
+  // 🔥 FORCE HARD REFRESH (cache nélkül)
+  window.location.href = window.location.pathname + "?t=" + Date.now();
 }
 </script>
 </body>
