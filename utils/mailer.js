@@ -6,7 +6,7 @@ async function sendMail({ to, subject, text, html }) {
   console.log("📨 RESEND EMAIL:", to);
 
   const response = await resend.emails.send({
-    from: "Zöld Tara háza <booking@zoldtarahaza.hu>",
+    from: "Zöld Tara háza <onboarding@resend.dev>",
     to,
     subject,
     html: html || `<p>${text}</p>`,
