@@ -89,6 +89,16 @@ router.post("/", (req, res) => {
     return res.status(400).json({ error: "Ez a nap nem foglalható" });
   }
 
+  const now = new Date();
+  const bookingDateTime = new Date(
+    `${date}T${slot.split("-")[0]}:00`
+  );
+
+  if (bookingDateTime <= now) {
+    return res.status(400).json({
+      error: "Ez az időpont már elmúlt",
+    });
+  }
   db.get(
     "SELECT id, name FROM services WHERE id = ?",
     [serviceId],
@@ -307,14 +317,13 @@ router.get("/cancel-info", (req, res) => {
       if (err) return res.status(500).json({ error: "Adatbázis hiba" });
       if (!booking) return res.status(404).json({ error: "Foglalás nem található" });
 
-      const bookingDate = new Date(booking.date);
-      const nowDate = new Date();
-
-      bookingDate.setHours(0,0,0,0);
-      nowDate.setHours(0,0,0,0);
+      const now = new Date();
+      const bookingDateTime = new Date(
+        `${booking.date}T${booking.slot.split("-")[0]}:00`
+      );
 
       const cancellable =
-        booking.status === "confirmed" && bookingDate > nowDate;
+        booking.status === "confirmed" && bookingDateTime > now;
 
       res.json({
         booking: {
