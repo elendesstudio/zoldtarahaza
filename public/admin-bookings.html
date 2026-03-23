@@ -154,27 +154,30 @@ row.innerHTML=`
 <td class="p-3">${b.phone||""}</td>
 <td class="p-3">${b.note||""}</td>
 
+
 <td class="p-3">
 
-${b.status !== "confirmed"
-? `<button onclick="restore(${b.id})"
-class="px-4 py-2 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 text-xs font-semibold whitespace-nowrap">
-Újraaktiválás
-</button>`
-: ''}
+${b.deleted == 1
+? '<span class="px-2 py-1 rounded bg-red-600/40 text-xs">törölt</span>'
+: '<span class="px-2 py-1 rounded bg-emerald-600/40 text-xs">aktív</span>'}
 
 </td>
 
 <td class="p-3">
 
-${b.deleted==1
+${b.deleted == 1
 ? `<button onclick="restore(${b.id})"
 class="px-4 py-2 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 text-xs font-semibold whitespace-nowrap">
 Újraaktiválás
 </button>`
-: ''}
+: `<button onclick="deleteBooking(${b.id})"
+class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-semibold whitespace-nowrap">
+Törlés
+</button>`
+}
 
 </td>
+
 
 `;
 
@@ -204,5 +207,17 @@ loadBookings("all");
 
 <script src="assets/js/cookie.js"></script>
 
+    <script>
+        async function deleteBooking(id){
+
+        if(!confirm("Biztos törlöd ezt a foglalást?")) return;
+
+        await fetch(`/api/admin/bookings/${id}`, {
+            method:"DELETE"
+        });
+
+        loadBookings("all");
+        }
+    </script>
 </body>
 </html>
