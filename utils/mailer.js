@@ -1,34 +1,20 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // kötelező Gmailhez
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  connectionTimeout: 5000, // 🔥 EZ A LÉNYEG
-  greetingTimeout: 5000,
-  socketTimeout: 5000,
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendMail({ to, subject, text, html }) {
-  console.log("📨 EMAIL PRÓBA:", to);
+  console.log("📨 RESEND EMAIL:", to);
 
-  const info = await transporter.sendMail({
-    from: `"Zöld Tara háza" <${process.env.EMAIL_USER}>`,
+  const response = await resend.emails.send({
+    from: "Zöld Tara háza <onboarding@resend.dev>",
     to,
     subject,
-    text,
-    html,
+    html: html || `<p>${text}</p>`,
   });
 
-  console.log("✅ EMAIL SENT:", info.response);
+  console.log("✅ RESEND OK:", response);
 
-  return info;
+  return response;
 }
 
-module.exports = {
-  sendMail,
-};
+module.exports = { sendMail };
