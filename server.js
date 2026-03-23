@@ -309,7 +309,6 @@ app.get("/api/admin/bookings", requireAdmin, (req, res) => {
 // =====================================================
 
 app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
-
   const bookingId = req.params.id;
 
   db.get(
@@ -320,27 +319,34 @@ app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
     WHERE b.id = ?
     `,
     [bookingId],
-    async (err, booking) => {
+    (err, booking) => {
+      if (err) {
+        return res.status(500).json({ error: "Adatbázis hiba" });
+      }
 
-      if (err || !booking)
-        return res.status(500).json({ error: "Foglalás nem található" });
+      if (!booking) {
+        return res.status(404).json({ error: "Foglalás nem található" });
+      }
 
       db.run(
         "UPDATE bookings SET deleted = 1 WHERE id = ?",
         [bookingId],
-        async function (err) {
-
-          if (err)
+        function (err) {
+          if (err) {
             return res.status(500).json({ error: "Törlés hiba" });
+          }
 
-          try {
+          // Először válasz a frontendnek
+          res.json({ success: true });
 
-            await transporter.sendMail({
-              from: process.env.EMAIL_USER,
-              to: booking.email,
-              subject: "Időpont törölve – Zöld Tara háza",
-              text: `
-Kedves ${booking.name}!
+          // Email külön, háttérben
+          (async () => {
+            try {
+              await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: booking.email,
+                subject: "Időpont törölve – Zöld Tara háza",
+                text: `Kedves ${booking.name}!
 
 Az alábbi időpontfoglalás törlésre került:
 
@@ -351,22 +357,16 @@ Időpont: ${booking.slot}
 Ha kérdésed van, válaszolj erre az emailre.
 
 Üdvözlettel,
-Zöld Tara háza
-              `
-            });
-
-          } catch (emailErr) {
-            console.error("Email hiba:", emailErr);
-          }
-
-          res.json({ success: true });
-
+Zöld Tara háza`
+              });
+            } catch (emailErr) {
+              console.error("Email hiba:", emailErr);
+            }
+          })();
         }
       );
-
     }
   );
-
 });
 
 

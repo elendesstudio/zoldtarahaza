@@ -194,12 +194,10 @@ table.appendChild(row);
 }
 
 async function restore(id){
-
-  await fetch(`/api/admin/bookings/${id}/restore`,{
+  await fetch(`/api/admin/bookings/${id}/restore`, {
     method:"POST"
   });
 
-  // 🔥 FORCE HARD REFRESH
   window.location.href = window.location.pathname + "?t=" + Date.now();
 }
 
