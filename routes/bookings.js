@@ -262,12 +262,92 @@ router.post("/cancel", async (req, res) => {
       return res.status(400).json({ error: "Már lemondva" });
     }
 
+    // ✅ törlés
     await pg.query(
       "UPDATE bookings SET deleted = 1 WHERE id = $1",
       [booking.id]
     );
 
+    // ✅ AZONNAL válasz (UI ne várjon emailre)
     res.json({ ok: true });
+
+    // =========================
+    // 📧 USER EMAIL
+    // =========================
+    if (booking.email) {
+      sendMail({
+  to: booking.email,
+  subject: "Időpont lemondva",
+  html: `
+  <div style="margin:0;padding:0;background:#0f2e2a;font-family:Arial,sans-serif;">
+    
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:20px;">
+      <tr>
+        <td align="center">
+
+          <table width="100%" cellpadding="0" cellspacing="0" 
+            style="max-width:480px;background:#123d36;border-radius:14px;padding:24px;color:#ffffff;">
+
+            <!-- TITLE -->
+            <tr>
+              <td align="center" style="font-size:20px;font-weight:700;padding-bottom:6px;">
+                Zöld Tara háza
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="font-size:13px;color:#9fe3c7;padding-bottom:18px;">
+                Időpont lemondva
+              </td>
+            </tr>
+
+            <!-- TEXT -->
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:18px;">
+                Kedves <strong>${booking.name}</strong>!<br><br>
+                A foglalásod sikeresen <strong>lemondtad</strong>.
+              </td>
+            </tr>
+
+            <!-- BOX -->
+            <tr>
+              <td style="background:#0f2e2a;border-radius:10px;padding:14px;font-size:14px;line-height:1.6;">
+                <b>Dátum:</b> ${booking.date}<br>
+                <b>Időpont:</b> ${booking.slot}
+              </td>
+            </tr>
+
+            <!-- INFO -->
+            <tr>
+              <td style="padding-top:20px;font-size:13px;color:#9fe3c7;text-align:center;">
+                Ha új időpontot szeretnél, bármikor foglalhatsz újra.
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
+  </div>
+  `
+}).catch(err => console.error("USER EMAIL FAIL:", err));
+    }
+
+    // =========================
+    // 📧 ADMIN EMAIL
+    // =========================
+    sendMail({
+      to: process.env.OWNER_EMAIL,
+      subject: "Foglalás lemondva",
+      text: `
+Név: ${booking.name}
+Email: ${booking.email}
+Dátum: ${booking.date}
+Időpont: ${booking.slot}
+      `
+    }).catch(err => console.error("ADMIN EMAIL FAIL:", err));
 
   } catch (err) {
     console.error("CANCEL ERROR:", err);

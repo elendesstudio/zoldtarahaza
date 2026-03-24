@@ -1,13 +1,12 @@
 console.log("NEW VERSION DEPLOY");
 
 require("dotenv").config();
-const nodemailer = require("nodemailer");
 
-require("./db/database");
 require("./db/init");
 
 const pg = require("./db/postgres");
-const db = require("./db/database"); // EZ MARAD
+const db = require("./db/database");
+const { sendMail } = require("./utils/mailer");
 
 // =====================================================
 // ADD SOFT DELETE FIELD
@@ -33,37 +32,6 @@ const contactRoutes = require("./routes/contact");
 
 const app = express();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-app.get("/api/test-email", (req, res) => {
-
-  console.log("TEST EMAIL ROUTE HIT");
-
-  // AZONNAL válaszolunk!
-  res.send("ROUTE OK - email küldés indul");
-
-  transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: process.env.OWNER_EMAIL,
-    subject: "Teszt email",
-    text: "Ez egy teszt email"
-  }, (err, info) => {
-
-    if (err) {
-      console.error("EMAIL ERROR:", err);
-    } else {
-      console.log("EMAIL SENT:", info.response);
-    }
-
-  });
-
-});
 
 // =====================================================
 // 🗄️ DATABASE TABLES
@@ -376,24 +344,79 @@ app.delete("/api/admin/bookings/:id", requireAdmin, async (req, res) => {
       return;
     }
 
-    transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: booking.email,
-      subject: `Időpont törölve – ${booking.date} ${booking.slot}`,
-      text: `Kedves ${booking.name}!
+    sendMail({
+  to: booking.email,
+  subject: "Időpont törölve",
+  html: `
+        <div style="margin:0;padding:0;background:#0f2e2a;font-family:Arial,sans-serif;">
+          
+          <table width="100%" cellpadding="0" cellspacing="0" style="padding:20px;">
+            <tr>
+              <td align="center">
 
-Az alábbi időpontfoglalás törlésre került:
+                <table width="100%" cellpadding="0" cellspacing="0" 
+                  style="max-width:480px;background:#123d36;border-radius:14px;padding:24px;color:#ffffff;">
 
-Szolgáltatás: ${booking.service_name}
-Dátum: ${booking.date}
-Időpont: ${booking.slot}
+                  <tr>
+                    <td align="center" style="font-size:20px;font-weight:700;padding-bottom:6px;">
+                      Zöld Tara háza
+                    </td>
+                  </tr>
 
-Üdvözlettel,
-Zöld Tara háza`
-    }, (err) => {
-      if (err) console.error("EMAIL HIBA:", err);
-      else console.log("EMAIL OK:", booking.email);
-    });
+                  <tr>
+                    <td align="center" style="font-size:13px;color:#9fe3c7;padding-bottom:18px;">
+                      Időpont törölve
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="font-size:14px;line-height:1.6;padding-bottom:18px;">
+                      Kedves <strong>${booking.name || "Vendég"}</strong>!<br><br>
+                      Az időpontod <strong>törlésre került</strong>.
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="background:#0f2e2a;border-radius:10px;padding:14px;font-size:14px;line-height:1.6;">
+                      <b>Dátum:</b> ${booking.date}<br>
+                      <b>Időpont:</b> ${booking.slot}<br>
+                      <b>Kezelés:</b> ${booking.service_name || ""}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td align="center" style="padding-top:22px;">
+                      <a href="${process.env.BASE_URL}/foglalas.html" 
+                        style="
+                          display:inline-block;
+                          background:#16a34a;
+                          color:#ffffff;
+                          padding:12px 20px;
+                          border-radius:8px;
+                          text-decoration:none;
+                          font-size:14px;
+                          font-weight:600;
+                        ">
+                        Új időpont foglalása
+                      </a>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding-top:20px;font-size:12px;color:#9fe3c7;text-align:center;">
+                      Ha kérdésed van, válaszolj erre az emailre.
+                    </td>
+                  </tr>
+
+                </table>
+
+              </td>
+            </tr>
+          </table>
+
+        </div>
+        `
+      }).catch(err => console.error("ADMIN DELETE EMAIL FAIL:", err));
 
   } catch (err) {
     console.error("POSTGRES ERROR:", err);
@@ -587,18 +610,15 @@ app.post("/api/bookings/:id/cancel", async (req, res) => {
 
     res.json({ success: true });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.OWNER_EMAIL,
-      subject: "Foglalás törölve",
-      text: `
-Név: ${booking.name}
-Email: ${booking.email}
-Szolgáltatás: ${booking.service_name}
-Dátum: ${booking.date}
-Időpont: ${booking.slot}
-      `
-    });
+    sendMail({
+  to: process.env.OWNER_EMAIL,
+  subject: "Foglalás törölve",
+  html: `
+    <p>Foglalás törölve:</p>
+    <p>${booking.date} - ${booking.slot}</p>
+    <p>${booking.name} (${booking.email})</p>
+  `
+}).catch(err => console.error("ADMIN EMAIL FAIL:", err));
 
   } catch (err) {
     console.error(err);
