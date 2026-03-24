@@ -264,7 +264,7 @@ router.post("/cancel", async (req, res) => {
 
     // ✅ törlés
     await pg.query(
-      "UPDATE bookings SET deleted = 1 WHERE id = $1",
+      "UPDATE bookings SET deleted = 1, cancelled_by = 'user' WHERE id = $1",
       [booking.id]
     );
 
@@ -312,6 +312,7 @@ router.post("/cancel", async (req, res) => {
             <!-- BOX -->
             <tr>
               <td style="background:#0f2e2a;border-radius:10px;padding:14px;font-size:14px;line-height:1.6;">
+                <b>Kezelés:</b> ${booking.service_name}<br>
                 <b>Dátum:</b> ${booking.date}<br>
                 <b>Időpont:</b> ${booking.slot}
               </td>

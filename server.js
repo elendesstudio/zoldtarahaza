@@ -332,7 +332,7 @@ app.delete("/api/admin/bookings/:id", requireAdmin, async (req, res) => {
 
     // ✅ POSTGRES TÖRLÉS
     await pg.query(
-      "UPDATE bookings SET deleted = 1 WHERE id = $1",
+      "UPDATE bookings SET deleted = 1, cancelled_by = 'admin' WHERE id = $1",
       [bookingId]
     );
 
@@ -478,7 +478,7 @@ app.post("/api/admin/bookings/:id/restore", requireAdmin, async (req, res) => {
   try {
 
     await pg.query(
-      "UPDATE bookings SET deleted = 0 WHERE id = $1",
+      "UPDATE bookings SET deleted = 0, cancelled_by = NULL WHERE id = $1",
       [req.params.id]
     );
 
@@ -604,7 +604,7 @@ app.post("/api/bookings/:id/cancel", async (req, res) => {
       return res.status(404).json({ error: "Nem található" });
 
     await pg.query(
-      "UPDATE bookings SET deleted = 1 WHERE id = $1",
+      "UPDATE bookings SET deleted = 1, cancelled_by = 'user' WHERE id = $1",
       [bookingId]
     );
 
@@ -612,9 +612,9 @@ app.post("/api/bookings/:id/cancel", async (req, res) => {
 
     sendMail({
   to: process.env.OWNER_EMAIL,
-  subject: "Foglalás törölve",
+  subject: "Foglalás lemondva",
   html: `
-    <p>Foglalás törölve:</p>
+    <p>Foglalás lemondva:</p>
     <p>${booking.date} - ${booking.slot}</p>
     <p>${booking.name} (${booking.email})</p>
   `
@@ -626,3 +626,6 @@ app.post("/api/bookings/:id/cancel", async (req, res) => {
   }
 
 });
+
+
+module.exports = app;
