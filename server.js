@@ -42,7 +42,10 @@ const transporter = nodemailer.createTransport({
 
 app.get("/api/test-email", (req, res) => {
 
-  console.log("TEST ROUTE HIT");
+  console.log("TEST EMAIL ROUTE HIT");
+
+  // AZONNAL válaszolunk!
+  res.send("ROUTE OK - email küldés indul");
 
   transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -53,12 +56,10 @@ app.get("/api/test-email", (req, res) => {
 
     if (err) {
       console.error("EMAIL ERROR:", err);
-      return res.status(500).send("EMAIL HIBA");
+    } else {
+      console.log("EMAIL SENT:", info.response);
     }
 
-    console.log("EMAIL SENT:", info.response);
-
-    res.send("OK - EMAIL ELKÜLDVE");
   });
 
 });
