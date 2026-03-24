@@ -38,19 +38,19 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-app.get("/test-email", async (req, res) => {
+app.get("/api/test-email", async (req, res) => {
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.OWNER_EMAIL,
       subject: "Teszt email - Zöld Tara háza",
-      text: "Ha ezt az emailt látod, az email küldés működik 🎉"
+      text: "Ha ezt látod, működik"
     });
 
     res.send("Email elküldve!");
   } catch (error) {
     console.error("EMAIL HIBA:", error);
-    res.status(500).send("Hiba történt email küldés közben.");
+    res.status(500).send("Hiba");
   }
 });
 
