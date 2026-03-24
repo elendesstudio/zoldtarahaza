@@ -278,7 +278,7 @@ app.get("/api/admin/bookings", requireAdmin, async (req, res) => {
         FROM bookings b
         LEFT JOIN services s ON s.id = b.service_id
         WHERE b.date = $1
-        AND b.deleted = 0
+        AND (b.deleted = 0 OR b.deleted IS NULL)
         ORDER BY b.slot ASC
       `, [date]);
 
@@ -291,15 +291,25 @@ app.get("/api/admin/bookings", requireAdmin, async (req, res) => {
         SELECT date, slot
         FROM bookings
         WHERE to_char(date, 'YYYY-MM') = $1
-        AND deleted = 0
+        AND (deleted = 0 OR deleted IS NULL)
       `, [month]);
 
       const map = {};
 
       result.rows.forEach(r => {
-        if (!map[r.date]) map[r.date] = [];
-        map[r.date].push(r.slot);
-      });
+
+      const d = new Date(r.date);
+
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+
+      const dateStr = `${y}-${m}-${day}`;
+
+      if (!map[dateStr]) map[dateStr] = [];
+      map[dateStr].push(r.slot);
+
+    });
 
       return res.json(map);
     }
