@@ -112,7 +112,80 @@ router.post("/", async (req, res) => {
     sendMail({
       to: email,
       subject: "Foglalás visszaigazolás",
-      html: `<p>Sikeres foglalás. <br><a href="${cancelLink}">Lemondás</a></p>`
+      html: `
+<div style="margin:0;padding:0;background:#0f2e2a;font-family:Arial,sans-serif;">
+  
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:20px;">
+    <tr>
+      <td align="center">
+
+        <table width="100%" cellpadding="0" cellspacing="0" 
+          style="max-width:480px;background:#123d36;border-radius:14px;padding:24px;color:#ffffff;">
+
+          <!-- LOGO / TITLE -->
+          <tr>
+            <td align="center" style="font-size:20px;font-weight:700;padding-bottom:6px;">
+              Zöld Tara háza
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="font-size:13px;color:#9fe3c7;padding-bottom:18px;">
+              Foglalás visszaigazolás
+            </td>
+          </tr>
+
+          <!-- TEXT -->
+          <tr>
+            <td style="font-size:14px;line-height:1.6;padding-bottom:18px;">
+              Kedves <strong>${name}</strong>!<br><br>
+              A foglalásod sikeresen rögzítettük.
+            </td>
+          </tr>
+
+          <!-- BOX -->
+          <tr>
+            <td style="background:#0f2e2a;border-radius:10px;padding:14px;font-size:14px;line-height:1.6;">
+              <b>Dátum:</b> ${date}<br>
+              <b>Időpont:</b> ${slot}<br>
+              <b>Kezelés:</b> ${service.name}
+            </td>
+          </tr>
+
+          <!-- BUTTON -->
+          <tr>
+            <td align="center" style="padding-top:22px;">
+              <a href="${cancelLink}" 
+                style="
+                  display:inline-block;
+                  background:#16a34a;
+                  color:#ffffff;
+                  padding:12px 20px;
+                  border-radius:8px;
+                  text-decoration:none;
+                  font-size:14px;
+                  font-weight:600;
+                ">
+                Időpont lemondása
+              </a>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="padding-top:20px;font-size:12px;color:#9fe3c7;text-align:center;">
+              Ha kérdésed van, válaszolj erre az emailre.
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</div>
+`
     }).catch(console.error);
 
   } catch (err) {
