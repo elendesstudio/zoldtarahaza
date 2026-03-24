@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 require("./db/database");
 require("./db/init");
 
-const db = require("./db/postgres");
+const db = require("./db/database");
 
 // =====================================================
 // ADD SOFT DELETE FIELD
