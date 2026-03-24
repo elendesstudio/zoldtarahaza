@@ -258,6 +258,16 @@ app.post("/api/admin/daily-slots", requireAdmin, (req, res) => {
 });
 
 
+//helper
+function getNextMonth(monthStr) {
+  const [y, m] = monthStr.split("-").map(Number);
+  const next = new Date(y, m, 1);
+  const ny = next.getFullYear();
+  const nm = String(next.getMonth() + 1).padStart(2, "0");
+  return `${ny}-${nm}-01`;
+}
+
+
 // =====================================================
 // 📅 ADMIN – BOOKING LIST (napi + havi összesítő)
 // =====================================================
@@ -290,9 +300,13 @@ app.get("/api/admin/bookings", requireAdmin, async (req, res) => {
       const result = await pg.query(`
         SELECT date, slot
         FROM bookings
-        WHERE to_char(date, 'YYYY-MM') = $1
+        WHERE date >= $1
+        AND date < $2
         AND (deleted = 0 OR deleted IS NULL)
-      `, [month]);
+      `, [
+        `${month}-01`,
+        getNextMonth(month)
+      ]);
 
       const map = {};
 
