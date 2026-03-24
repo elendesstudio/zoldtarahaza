@@ -308,7 +308,7 @@ app.get("/api/admin/bookings", requireAdmin, (req, res) => {
 // 🗑️ ADMIN – FOGLALÁS TÖRLÉS
 // =====================================================
 
-app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
+aapp.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
   const bookingId = req.params.id;
 
   db.get(
