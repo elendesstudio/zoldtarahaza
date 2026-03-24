@@ -395,6 +395,9 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true, message: "Backend fut ✅" });
 });
 
+app.get("/", (req, res) => {
+  res.send("Backend fut 🚀");
+});
 
 // =====================================================
 // 🚀 SERVER START
