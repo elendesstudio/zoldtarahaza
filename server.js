@@ -264,66 +264,53 @@ app.post("/api/admin/daily-slots", requireAdmin, (req, res) => {
 
 // GET /api/admin/bookings?date=YYYY-MM-DD  -> részletes napi lista
 // GET /api/admin/bookings?month=YYYY-MM    -> havi összesítő map: {date: [slot,...]}
-app.get("/api/admin/bookings", requireAdmin, (req, res) => {
+app.get("/api/admin/bookings", requireAdmin, async (req, res) => {
+
   const { date, month } = req.query;
 
-  if (date) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return res.status(400).json({ error: "Hibás date formátum (YYYY-MM-DD)" });
+  try {
+
+    if (date) {
+
+      const result = await pg.query(`
+        SELECT b.id, b.date, b.slot, b.name, b.phone, b.email, b.note, b.created_at,
+               s.name AS service_name
+        FROM bookings b
+        LEFT JOIN services s ON s.id = b.service_id
+        WHERE b.date = $1
+        AND b.deleted = 0
+        ORDER BY b.slot ASC
+      `, [date]);
+
+      return res.json(result.rows);
     }
 
-    db.all(
-      `
-      SELECT b.id, b.date, b.slot, b.name, b.phone, b.email, b.note, b.created_at,
-             s.name AS service_name
-      FROM bookings b
-      LEFT JOIN services s ON s.id = b.service_id
-      WHERE b.date = ?
-      AND b.status = 'confirmed'
-      AND b.deleted = 0
-      ORDER BY b.slot ASC, b.created_at DESC
-      `,
-      [date],
-      (err, rows) => {
-        if (err) return res.status(500).json({ error: "Adatbázis hiba" });
-        res.json(rows);
-      }
-    );
-    return;
-  }
+    if (month) {
 
-  if (month) {
-    if (!/^\d{4}-\d{2}$/.test(month)) {
-      return res.status(400).json({ error: "Hibás month formátum (YYYY-MM)" });
+      const result = await pg.query(`
+        SELECT date, slot
+        FROM bookings
+        WHERE to_char(date, 'YYYY-MM') = $1
+        AND deleted = 0
+      `, [month]);
+
+      const map = {};
+
+      result.rows.forEach(r => {
+        if (!map[r.date]) map[r.date] = [];
+        map[r.date].push(r.slot);
+      });
+
+      return res.json(map);
     }
 
-    db.all(
-      `
-      SELECT date, slot, COUNT(*) as cnt
-      FROM bookings
-      WHERE substr(date,1,7) = ?
-      AND status = 'confirmed'
-      AND deleted = 0
-      GROUP BY date, slot
-      ORDER BY date ASC, slot ASC
-      `,
-      [month],
-      (err, rows) => {
-        if (err) return res.status(500).json({ error: "Adatbázis hiba" });
+    res.status(400).json({ error: "Add meg: date vagy month" });
 
-        const map = {};
-        rows.forEach(r => {
-          if (!map[r.date]) map[r.date] = [];
-          map[r.date].push(r.slot);
-        });
-
-        res.json(map);
-      }
-    );
-    return;
+  } catch (err) {
+    console.error("POSTGRES ERROR:", err);
+    res.status(500).json({ error: "DB hiba" });
   }
 
-  res.status(400).json({ error: "Add meg: date=YYYY-MM-DD vagy month=YYYY-MM" });
 });
 
 
@@ -331,44 +318,45 @@ app.get("/api/admin/bookings", requireAdmin, (req, res) => {
 // 🗑️ ADMIN – FOGLALÁS TÖRLÉS
 // =====================================================
 
-app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
+app.delete("/api/admin/bookings/:id", requireAdmin, async (req, res) => {
   const bookingId = req.params.id;
 
-  db.get(
-    `
-    SELECT b.*, s.name as service_name
-    FROM bookings b
-    LEFT JOIN services s ON s.id = b.service_id
-    WHERE b.id = ?
-    `,
-    [bookingId],
-    (err, booking) => {
+  try {
+    const result = await pg.query(
+      `
+      SELECT b.*, s.name as service_name
+      FROM bookings b
+      LEFT JOIN services s ON s.id = b.service_id
+      WHERE b.id = $1
+      `,
+      [bookingId]
+    );
 
-      if (err) return res.status(500).json({ error: "Adatbázis hiba" });
-      if (!booking) return res.status(404).json({ error: "Foglalás nem található" });
+    const booking = result.rows[0];
 
-      db.run(
-        "UPDATE bookings SET deleted = 1 WHERE id = ?",
-        [bookingId],
-        function (err) {
+    if (!booking) {
+      return res.status(404).json({ error: "Foglalás nem található" });
+    }
 
-          if (err) return res.status(500).json({ error: "Törlés hiba" });
+    // ✅ POSTGRES TÖRLÉS
+    await pg.query(
+      "UPDATE bookings SET deleted = 1 WHERE id = $1",
+      [bookingId]
+    );
 
-          // ✅ AZONNALI RESPONSE
-          res.json({ success: true });
+    // ✅ AZONNAL VÁLASZ
+    res.json({ success: true });
 
-          // ❗ extra védelem
-          if (!booking.email) {
-            console.log("NINCS EMAIL EHHEZ A FOGLALÁSHOZ");
-            return;
-          }
+    if (!booking.email) {
+      console.log("NINCS EMAIL");
+      return;
+    }
 
-          // ✅ EMAIL (nem blokkol)
-          transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: booking.email,
-            subject: `Időpont törölve – ${booking.date} ${booking.slot}`,
-            text: `Kedves ${booking.name}!
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: booking.email,
+      subject: `Időpont törölve – ${booking.date} ${booking.slot}`,
+      text: `Kedves ${booking.name}!
 
 Az alábbi időpontfoglalás törlésre került:
 
@@ -378,21 +366,15 @@ Időpont: ${booking.slot}
 
 Üdvözlettel,
 Zöld Tara háza`
-          }, (err, info) => {
+    }, (err) => {
+      if (err) console.error("EMAIL HIBA:", err);
+      else console.log("EMAIL OK:", booking.email);
+    });
 
-            if (err) {
-              console.error("EMAIL HIBA:", err);
-            } else {
-              console.log("EMAIL ELKÜLDVE:", booking.email);
-            }
-
-          });
-
-        }
-      );
-
-    }
-  );
+  } catch (err) {
+    console.error("POSTGRES ERROR:", err);
+    res.status(500).json({ error: "Szerver hiba" });
+  }
 });
 
 
@@ -444,16 +426,20 @@ app.listen(PORT, "0.0.0.0", () => {
 // RESTORE BOOKING
 // =====================================================
 
-app.post("/api/admin/bookings/:id/restore", requireAdmin, (req, res) => {
+app.post("/api/admin/bookings/:id/restore", requireAdmin, async (req, res) => {
 
-  db.run(
-    "UPDATE bookings SET deleted = 0 WHERE id = ?",
-    [req.params.id],
-    function (err) {
-      if (err) return res.status(500).json({ error: "Restore hiba" });
-      res.json({ success: true });
-    }
-  );
+  try {
+
+    await pg.query(
+      "UPDATE bookings SET deleted = 0 WHERE id = $1",
+      [req.params.id]
+    );
+
+    res.json({ success: true });
+
+  } catch (err) {
+    res.status(500).json({ error: "Restore hiba" });
+  }
 
 });
 
@@ -524,34 +510,31 @@ app.delete("/api/admin/services/:id", (req, res) => {
 // ADMIN – ALL BOOKINGS
 // =====================================================
 
-app.get("/api/admin/bookings-all", requireAdmin, (req,res)=>{
+app.get("/api/admin/bookings-all", requireAdmin, async (req, res) => {
 
   const { filter } = req.query;
 
   let where = "";
 
-  if(filter === "active"){
-    where = "WHERE deleted = 0";
-  }
+  if (filter === "active") where = "WHERE deleted = 0";
+  if (filter === "deleted") where = "WHERE deleted = 1";
 
-  if(filter === "deleted"){
-    where = "WHERE deleted = 1";
-  }
+  try {
 
-  db.all(
-    `
-    SELECT b.*, s.name as service_name
-    FROM bookings b
-    LEFT JOIN services s ON s.id = b.service_id
-    ${where}
-    ORDER BY b.date DESC, b.slot DESC
-    `,
-    [],
-    (err,rows)=>{
-      if(err) return res.status(500).json({error:"DB hiba"});
-      res.json(rows);
-    }
-  );
+    const result = await pg.query(`
+      SELECT b.*, s.name as service_name
+      FROM bookings b
+      LEFT JOIN services s ON s.id = b.service_id
+      ${where}
+      ORDER BY b.date DESC, b.slot DESC
+    `);
+
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "DB hiba" });
+  }
 
 });
 
@@ -559,55 +542,43 @@ app.post("/api/bookings/:id/cancel", async (req, res) => {
 
   const bookingId = req.params.id;
 
-  db.get(
-    `
-    SELECT b.*, s.name as service_name
-    FROM bookings b
-    LEFT JOIN services s ON s.id = b.service_id
-    WHERE b.id = ?
-    `,
-    [bookingId],
-    async (err, booking) => {
+  try {
 
-      if (err || !booking)
-        return res.status(500).json({ error: "Foglalás nem található" });
+    const result = await pg.query(`
+      SELECT b.*, s.name as service_name
+      FROM bookings b
+      LEFT JOIN services s ON s.id = b.service_id
+      WHERE b.id = $1
+    `, [bookingId]);
 
-      db.run(
-        "UPDATE bookings SET deleted = 1 WHERE id = ?",
-        [bookingId],
-        async function (err) {
+    const booking = result.rows[0];
 
-          if (err)
-            return res.status(500).json({ error: "Törlés hiba" });
+    if (!booking)
+      return res.status(404).json({ error: "Nem található" });
 
-          try {
+    await pg.query(
+      "UPDATE bookings SET deleted = 1 WHERE id = $1",
+      [bookingId]
+    );
 
-            await transporter.sendMail({
-              from: process.env.EMAIL_USER,
-              to: process.env.OWNER_EMAIL,
-              subject: "Foglalás törölve a felhasználó által",
-              text: `
-A felhasználó törölte az időpontját.
+    res.json({ success: true });
 
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.OWNER_EMAIL,
+      subject: "Foglalás törölve",
+      text: `
 Név: ${booking.name}
 Email: ${booking.email}
-
 Szolgáltatás: ${booking.service_name}
 Dátum: ${booking.date}
 Időpont: ${booking.slot}
-              `
-            });
+      `
+    });
 
-          } catch (emailErr) {
-            console.error("Email hiba:", emailErr);
-          }
-
-          res.json({ success: true });
-
-        }
-      );
-
-    }
-  );
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Hiba" });
+  }
 
 });
