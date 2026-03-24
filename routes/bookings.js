@@ -317,45 +317,49 @@ router.get("/admin/bookings-all", (req, res) => {
 });
 
 // ===== ADMIN DELETE =====
-router.delete("/admin/bookings/:id", (req, res) => {
+router.delete("/admin/bookings/:id", async (req, res) => {
   const id = req.params.id;
 
-  db.get(`
-    SELECT b.*, s.name as service_name
-    FROM bookings b
-    LEFT JOIN services s ON s.id = b.service_id
-    WHERE b.id = ?
-  `, [id], async (err, booking) => {
+  try {
 
-    if (err) return res.status(500).json({ error: "Adatbázis hiba" });
-    if (!booking) return res.status(404).json({ error: "Nem található" });
+    const result = await pg.query(`
+      SELECT b.*, s.name as service_name
+      FROM bookings b
+      LEFT JOIN services s ON s.id = b.service_id
+      WHERE b.id = $1
+    `, [id]);
 
-    db.run(`
+    const booking = result.rows[0];
+
+    if (!booking) {
+      return res.status(404).json({ error: "Nem található" });
+    }
+
+    await pg.query(`
       UPDATE bookings
       SET status = 'cancelled_by_admin'
-      WHERE id = ?
-    `, [id], async function () {
+      WHERE id = $1
+    `, [id]);
 
-      try {
-        if (booking.email) {
-          await sendMail({
-            to: booking.email,
-            subject: "Időpont törölve",
-            html: `
-              <p>Kedves ${booking.name || "Vendég"}!</p>
-              <p>Az időpontod törlésre került:</p>
-              <p><strong>${booking.date} - ${booking.slot}</strong></p>
-            `
-          });
-        }
-      } catch (e) {
-        console.error("EMAIL HIBA:", e);
-      }
+    // EMAIL
+    if (booking.email) {
+      await sendMail({
+        to: booking.email,
+        subject: "Időpont törölve",
+        html: `
+          <p>Kedves ${booking.name || "Vendég"}!</p>
+          <p>Az időpontod törlésre került:</p>
+          <p><strong>${booking.date} - ${booking.slot}</strong></p>
+        `
+      });
+    }
 
-      res.json({ ok: true });
-    });
+    res.json({ ok: true });
 
-  });
+  } catch (err) {
+    console.error("DELETE ERROR:", err);
+    res.status(500).json({ error: "Szerver hiba" });
+  }
 });
 
 // ===== ADMIN RESTORE =====
