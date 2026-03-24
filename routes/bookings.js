@@ -85,23 +85,31 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Nincs ilyen szolgáltatás" });
     }
 
-    const existing = await pg.query(
-      "SELECT id FROM bookings WHERE date = $1 AND slot = $2 AND deleted = 0",
-      [date, slot]
-    );
-
-    if (existing.rows.length > 0) {
-      return res.status(409).json({ error: "Foglalt időpont" });
-    }
 
     const cancelToken = crypto.randomBytes(32).toString("hex");
 
-    const insert = await pg.query(`
-      INSERT INTO bookings 
-      (service_id, date, slot, name, phone, email, note, status, cancel_token, deleted)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,'confirmed',$8,0)
-      RETURNING id
-    `, [serviceId, date, slot, name, phone, email, note || null, cancelToken]);
+    let insert;
+
+      try {
+
+        insert = await pg.query(`
+          INSERT INTO bookings 
+          (service_id, date, slot, name, phone, email, note, status, cancel_token, deleted)
+          VALUES ($1,$2,$3,$4,$5,$6,$7,'confirmed',$8,0)
+          RETURNING id
+        `, [serviceId, date, slot, name, phone, email, note || null, cancelToken]);
+
+      } catch (err) {
+
+        // 💥 EZ A KULCS
+        if (err.code === "23505") {
+          return res.status(409).json({
+            error: "Ez az időpont már foglalt"
+          });
+        }
+
+        throw err;
+      }
 
     const bookingId = insert.rows[0].id;
 
@@ -247,10 +255,12 @@ router.post("/cancel", async (req, res) => {
 
   try {
 
-    const result = await pg.query(
-      "SELECT * FROM bookings WHERE cancel_token = $1",
-      [token]
-    );
+    const result = await pg.query(`
+      SELECT b.*, s.name as service_name
+      FROM bookings b
+      LEFT JOIN services s ON s.id = b.service_id
+      WHERE b.cancel_token = $1
+    `, [token]);
 
     const booking = result.rows[0];
 
