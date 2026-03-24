@@ -130,11 +130,60 @@ router.post("/", async (req, res) => {
       to: email,
       subject: "Foglalás visszaigazolás",
       html: `
-        <p>Kedves ${name}!</p>
-        <p>Foglalásod rögzítve:</p>
-        <p><strong>${date} ${slot}</strong></p>
-        <a href="${cancelLink}">Lemondás</a>
-      `
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0f2e2a;padding:40px 0;font-family:Arial,sans-serif;">
+          <tr>
+            <td align="center">
+
+              <table width="500" cellpadding="0" cellspacing="0" style="background:#123d36;border-radius:12px;padding:30px;color:#ffffff;">
+                
+                <tr>
+                  <td align="center" style="font-size:22px;font-weight:bold;padding-bottom:10px;">
+                    Zöld Tara háza
+                  </td>
+                </tr>
+
+                <tr>
+                  <td align="center" style="font-size:16px;color:#9fe3c7;padding-bottom:20px;">
+                    Foglalás visszaigazolás
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="font-size:14px;line-height:1.6;padding-bottom:20px;">
+                    Kedves ${name}!<br><br>
+                    A foglalásod sikeresen rögzítettük.
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="background:#0f2e2a;border-radius:8px;padding:15px;font-size:14px;">
+                    <b>Dátum:</b> ${date}<br>
+                    <b>Időpont:</b> ${slot}<br>
+                    <b>Kezelés:</b> ${service.name}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td align="center" style="padding-top:25px;">
+                    <a href="${cancelLink}" 
+                      style="display:inline-block;background:#16a34a;color:#ffffff;padding:10px 18px;border-radius:6px;text-decoration:none;font-size:14px;">
+                      Időpont lemondása
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding-top:20px;font-size:13px;color:#9fe3c7;text-align:center;">
+                    Ha kérdésed van, válaszolj erre az emailre.
+                  </td>
+                </tr>
+
+              </table>
+
+            </td>
+          </tr>
+        </table>
+        `
     }).catch(console.error);
 
   } catch (err) {
