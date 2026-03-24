@@ -423,6 +423,22 @@
   if (bookingForm) {
     bookingForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      await loadSlotsForDate(state.selectedDate);
+
+      const stillExists = Array.from(slotsGrid.querySelectorAll("button"))
+      .some(btn => btn.dataset.slot === state.selectedSlot && !btn.disabled);
+
+      if (!stillExists) {
+        showToast("Ez az időpont már nem elérhető.", "error");
+
+        if (btnSubmit) btnSubmit.disabled = false;
+        if (btnSpinner) btnSpinner.classList.add("hidden");
+        if (btnText) btnText.textContent = "Foglalás véglegesítése";
+
+        return;
+      }
+
       clearToast();
 
       const err = validateFormClient();
@@ -624,4 +640,11 @@
   }
 
   init();
+
+  setInterval(() => {
+  if (state.selectedDate && state.selectedServiceId) {
+    loadSlotsForDate(state.selectedDate);
+  }
+}, 5000);
+  
 })();
