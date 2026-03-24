@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/database");
+const pg = require("../db/postgres");
 const { TIME_SLOTS, isWeekend, isHoliday } = require("../utils/calendar");
 
-// LOCAL dátum → YYYY-MM-DD (nem csúszik el időzónától)
+// =========================
+// HELPEREK
+// =========================
 function toLocalISODate(date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -11,198 +13,198 @@ function toLocalISODate(date) {
   return `${y}-${m}-${d}`;
 }
 
-// lekér egy napra:
-// - globális nap tiltás (blocked_days)
-// - napi slot felülírások (daily_slots)
-function getAdminOverrides(dateStr, cb) {
-  db.get("SELECT date FROM blocked_days WHERE date = ?", [dateStr], (err, blockedRow) => {
-    if (err) return cb(err);
-
-    db.all("SELECT slot, enabled FROM daily_slots WHERE date = ?", [dateStr], (err2, slotRows) => {
-      if (err2) return cb(err2);
-
-      const dailyMap = new Map();
-      (slotRows || []).forEach(r => dailyMap.set(r.slot, !!r.enabled));
-
-      cb(null, {
-        dayBlocked: !!blockedRow,
-        dailySlots: dailyMap, // slot -> enabled (true/false)
-      });
-    });
-  });
+function isValidDateString(dateStr) {
+  return typeof dateStr === "string" && /^\d{4}-\d{2}-\d{2}$/.test(dateStr);
 }
 
-// GET /api/availability/days?month=YYYY-MM
-router.get("/days", (req, res) => {
+function isValidMonthString(monthStr) {
+  return typeof monthStr === "string" && /^\d{4}-\d{2}$/.test(monthStr);
+}
+
+function getSlotStart(slot) {
+  return slot.split("-")[0];
+}
+
+// =========================
+// GET /days
+// =========================
+router.get("/days", async (req, res) => {
   const { month } = req.query;
-  if (!month) return res.status(400).json({ error: "Hiányzó month paraméter" });
 
-  const [year, monthNumber] = month.split("-").map(Number);
-  const daysInMonth = new Date(year, monthNumber, 0).getDate();
+  if (!isValidMonthString(month)) {
+    return res.status(400).json({ error: "Hibás month" });
+  }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  try {
+    const [year, monthNumber] = month.split("-").map(Number);
+    const daysInMonth = new Date(year, monthNumber, 0).getDate();
 
-  // 1) foglalások száma naponként
-  db.all(
-    "SELECT date, COUNT(*) as count FROM bookings WHERE status = 'confirmed' GROUP BY date",
-    [],
-    (err, bookingRows) => {
-      if (err) return res.status(500).json({ error: "Adatbázis hiba" });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      const bookingsCount = {};
-      bookingRows.forEach(r => (bookingsCount[r.date] = r.count));
+    // 🔥 FOGLALÁSOK (FIX)
+    const bookingsRes = await pg.query(`
+      SELECT date, COUNT(*) as count
+      FROM bookings
+      WHERE status = 'confirmed'
+        AND COALESCE(deleted, 0) = 0
+      GROUP BY date
+    `);
 
-      // 2) admin által tiltott napok (blocked_days) a hónapra
-      db.all(
-        "SELECT date FROM blocked_days WHERE substr(date,1,7) = ?",
-        [month],
-        (err2, blockedRows) => {
-          if (err2) return res.status(500).json({ error: "Adatbázis hiba" });
+    const bookingsCount = {};
+    bookingsRes.rows.forEach(r => {
+      bookingsCount[r.date] = Number(r.count);
+    });
 
-          const blockedSet = new Set((blockedRows || []).map(r => r.date));
+    const blockedRes = await pg.query(`
+      SELECT date FROM blocked_days
+      WHERE LEFT(date, 7) = $1
+    `, [month]);
 
-          // 3) napi slot felülírások a hónapra -> számoljuk, hány slot van ENGEDÉLYEZVE adott napra
-          db.all(
-            "SELECT date, slot, enabled FROM daily_slots WHERE substr(date,1,7) = ?",
-            [month],
-            (err3, dailyRows) => {
-              if (err3) return res.status(500).json({ error: "Adatbázis hiba" });
+    const blockedSet = new Set(blockedRes.rows.map(r => r.date));
 
-              // enabledCountByDate: ha van override, akkor onnan számolunk
-              // ha nincs override, akkor TIME_SLOTS.length az alap
-              const enabledCountByDate = {}; // date -> { hasOverride: bool, enabledCount: number }
+    const dailyRes = await pg.query(`
+      SELECT date, slot, enabled
+      FROM daily_slots
+      WHERE LEFT(date, 7) = $1
+    `, [month]);
 
-              (dailyRows || []).forEach(r => {
-                if (!enabledCountByDate[r.date]) {
-                  enabledCountByDate[r.date] = { hasOverride: true, enabledCount: 0 };
-                }
-                if (r.enabled) enabledCountByDate[r.date].enabledCount += 1;
-              });
+    const enabledCountByDate = {};
 
-              const result = [];
+    dailyRes.rows.forEach(r => {
+      if (!enabledCountByDate[r.date]) {
+        enabledCountByDate[r.date] = { hasOverride: true, enabledCount: 0 };
+      }
+      if (r.enabled) enabledCountByDate[r.date].enabledCount++;
+    });
 
-              for (let day = 1; day <= daysInMonth; day++) {
-                const d = new Date(year, monthNumber - 1, day);
-                const dateStr = toLocalISODate(d);
+    const result = [];
 
-                let status = "available";
+    for (let day = 1; day <= daysInMonth; day++) {
+      const d = new Date(year, monthNumber - 1, day);
+      const dateStr = toLocalISODate(d);
 
-                // hétvége/ünnep/múlt -> unavailable
-                if (d < today || isWeekend(dateStr) || isHoliday(dateStr)) {
-                  status = "unavailable";
-                } else if (blockedSet.has(dateStr)) {
-                  // admin nap tiltás -> unavailable
-                  status = "unavailable";
-                } else {
-                  // hány slot érhető el admin szerint?
-                  const info = enabledCountByDate[dateStr];
-                  const enabledSlotsCount = info && info.hasOverride ? info.enabledCount : TIME_SLOTS.length;
+      let status = "available";
 
-                  // ha 0 engedélyezett slot -> unavailable
-                  if (enabledSlotsCount <= 0) {
-                    status = "unavailable";
-                  } else {
-                    const booked = bookingsCount[dateStr] || 0;
-                    if (booked >= enabledSlotsCount) status = "full";
-                  }
-                }
+      if (d < today || isWeekend(dateStr) || isHoliday(dateStr)) {
+        status = "unavailable";
+      } else if (blockedSet.has(dateStr)) {
+        status = "unavailable";
+      } else {
+        const info = enabledCountByDate[dateStr];
+        const enabledSlots =
+          info && info.hasOverride ? info.enabledCount : TIME_SLOTS.length;
 
-                result.push({ date: dateStr, status });
-              }
-
-              res.json(result);
-            }
-          );
+        if (enabledSlots <= 0) {
+          status = "unavailable";
+        } else {
+          const booked = bookingsCount[dateStr] || 0;
+          if (booked >= enabledSlots) status = "full";
         }
-      );
+      }
+
+      result.push({ date: dateStr, status });
     }
-  );
+
+    res.json(result);
+
+  } catch (err) {
+    console.error("DAYS ERROR:", err);
+    res.status(500).json({ error: "Szerver hiba" });
+  }
 });
 
-// GET /api/availability/slots?date=YYYY-MM-DD&serviceId=1
-router.get("/slots", (req, res) => {
+// =========================
+// GET /slots
+// =========================
+router.get("/slots", async (req, res) => {
   const { date, serviceId } = req.query;
 
-  if (!date) return res.status(400).json({ error: "Hiányzó date paraméter" });
-
-  const selectedDate = new Date(`${date}T00:00:00`);
-  if (Number.isNaN(selectedDate.getTime())) {
-    return res.status(400).json({ error: "Hibás date formátum (várt: YYYY-MM-DD)" });
+  if (!isValidDateString(date)) {
+    return res.status(400).json({ error: "Hibás date" });
   }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  try {
+    const selectedDate = new Date(`${date}T00:00:00`);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  // hétvége/ünnep/múlt -> minden false
-  if (selectedDate < today || isWeekend(date) || isHoliday(date)) {
-    return res.json({
-      date,
-      slots: TIME_SLOTS.map(s => ({ slot: s, available: false })),
-      reason: "unavailable_day",
-    });
-  }
-
-  // serviceId opcionális, de ha meg van adva, ellenőrizzük létezik-e
-  const checkService = (cb) => {
-    if (!serviceId) return cb(null);
-
-    db.get("SELECT id FROM services WHERE id = ?", [serviceId], (err, row) => {
-      if (err) return cb(err);
-      if (!row) return cb(new Error("SERVICE_NOT_FOUND"));
-      cb(null);
-    });
-  };
-
-  checkService((serviceErr) => {
-    if (serviceErr) {
-      if (serviceErr.message === "SERVICE_NOT_FOUND") {
-        return res.status(400).json({ error: "Nincs ilyen serviceId" });
-      }
-      return res.status(500).json({ error: "Adatbázis hiba" });
+    if (selectedDate < today || isWeekend(date) || isHoliday(date)) {
+      return res.json({
+        date,
+        slots: TIME_SLOTS.map(s => ({ slot: s, available: false })),
+      });
     }
 
-    // admin override-ok (nap tiltás + slot tiltások)
-    getAdminOverrides(date, (ovErr, ov) => {
-      if (ovErr) return res.status(500).json({ error: "Adatbázis hiba" });
+    // service check
+    if (serviceId) {
+      const service = await pg.query(
+        "SELECT id FROM services WHERE id = $1",
+        [serviceId]
+      );
 
-      // admin nap tiltás -> minden false
-      if (ov.dayBlocked) {
-        return res.json({
-          date,
-          slots: TIME_SLOTS.map(s => ({ slot: s, available: false })),
-          reason: "admin_day_blocked",
-        });
+      if (!service.rows.length) {
+        return res.status(400).json({ error: "Nincs ilyen service" });
+      }
+    }
+
+    // admin override
+    const blocked = await pg.query(
+      "SELECT 1 FROM blocked_days WHERE date = $1",
+      [date]
+    );
+
+    if (blocked.rows.length) {
+      return res.json({
+        date,
+        slots: TIME_SLOTS.map(s => ({ slot: s, available: false })),
+      });
+    }
+
+    const daily = await pg.query(
+      "SELECT slot, enabled FROM daily_slots WHERE date = $1",
+      [date]
+    );
+
+    const dailyMap = new Map();
+    daily.rows.forEach(r => dailyMap.set(r.slot, r.enabled));
+
+    // 🔥 FOGLALT SLOTOK (EZ VOLT A BAJ)
+    const bookings = await pg.query(`
+      SELECT slot
+      FROM bookings
+      WHERE date = $1
+        AND status = 'confirmed'
+        AND COALESCE(deleted, 0) = 0
+    `, [date]);
+
+    const booked = new Set(bookings.rows.map(r => r.slot));
+
+    const now = new Date();
+    const isToday = toLocalISODate(now) === date;
+
+    const slots = TIME_SLOTS.map(slot => {
+      const enabled = dailyMap.has(slot) ? dailyMap.get(slot) : true;
+
+      let isPast = false;
+      if (isToday) {
+        const start = getSlotStart(slot);
+        const slotTime = new Date(`${date}T${start}:00`);
+        isPast = slotTime <= now;
       }
 
-      // foglalt slotok
-      db.all(
-        "SELECT slot FROM bookings WHERE date = ? AND status = 'confirmed'",
-        [date],
-        (err, rows) => {
-          if (err) return res.status(500).json({ error: "Adatbázis hiba" });
-
-          const booked = new Set(rows.map(r => r.slot));
-
-          // napi slot felülírás: ha nincs sor a slotra, akkor alapból true
-          const now = new Date();
-
-          const slots = TIME_SLOTS.map((slot) => {
-            const enabledByAdmin = ov.dailySlots.has(slot) ? ov.dailySlots.get(slot) : true;
-
-            const slotStart = new Date(`${date}T${slot.split("-")[0]}:00`);
-            const isPast = slotStart <= now;
-
-            const available = enabledByAdmin && !booked.has(slot) && !isPast;
-
-            return { slot, available };
-          });
-
-          res.json({ date, slots });
-        }
-      );
+      return {
+        slot,
+        available: enabled && !booked.has(slot) && !isPast
+      };
     });
-  });
+
+    res.json({ date, slots });
+
+  } catch (err) {
+    console.error("SLOTS ERROR:", err);
+    res.status(500).json({ error: "Szerver hiba" });
+  }
 });
 
 module.exports = router;
