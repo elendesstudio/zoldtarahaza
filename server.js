@@ -40,20 +40,27 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-app.get("/api/test-email", async (req, res) => {
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.OWNER_EMAIL,
-      subject: "Teszt email - Zöld Tara háza",
-      text: "Ha ezt látod, működik"
-    });
+app.get("/api/test-email", (req, res) => {
 
-    res.send("Email elküldve!");
-  } catch (error) {
-    console.error("EMAIL HIBA:", error);
-    res.status(500).send("Hiba");
-  }
+  console.log("TEST ROUTE HIT");
+
+  transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: process.env.OWNER_EMAIL,
+    subject: "Teszt email",
+    text: "Ez egy teszt email"
+  }, (err, info) => {
+
+    if (err) {
+      console.error("EMAIL ERROR:", err);
+      return res.status(500).send("EMAIL HIBA");
+    }
+
+    console.log("EMAIL SENT:", info.response);
+
+    res.send("OK - EMAIL ELKÜLDVE");
+  });
+
 });
 
 // =====================================================
