@@ -334,7 +334,6 @@ app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
       if (err) return res.status(500).json({ error: "Adatbázis hiba" });
       if (!booking) return res.status(404).json({ error: "Foglalás nem található" });
 
-      // ✅ 1. ELŐSZÖR TÖRLÉS (NEM ASYNC!)
       db.run(
         "UPDATE bookings SET deleted = 1 WHERE id = ?",
         [bookingId],
@@ -342,16 +341,21 @@ app.delete("/api/admin/bookings/:id", requireAdmin, (req, res) => {
 
           if (err) return res.status(500).json({ error: "Törlés hiba" });
 
-          // ✅ 2. AZONNAL VÁLASZ
+          // ✅ AZONNALI RESPONSE
           res.json({ success: true });
 
-          // ✅ 3. EMAIL KÜLÖN (DE NEM await!)
-          if (booking.email) {
-            transporter.sendMail({
-              from: process.env.EMAIL_USER,
-              to: booking.email,
-              subject: "Időpont törölve – Zöld Tara háza",
-              text: `Kedves ${booking.name}!
+          // ❗ extra védelem
+          if (!booking.email) {
+            console.log("NINCS EMAIL EHHEZ A FOGLALÁSHOZ");
+            return;
+          }
+
+          // ✅ EMAIL (nem blokkol)
+          transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: booking.email,
+            subject: `Időpont törölve – ${booking.date} ${booking.slot}`,
+            text: `Kedves ${booking.name}!
 
 Az alábbi időpontfoglalás törlésre került:
 
@@ -361,11 +365,15 @@ Időpont: ${booking.slot}
 
 Üdvözlettel,
 Zöld Tara háza`
-            }, (err) => {
-              if (err) console.error("EMAIL HIBA:", err);
-              else console.log("EMAIL OK:", booking.email);
-            });
-          }
+          }, (err, info) => {
+
+            if (err) {
+              console.error("EMAIL HIBA:", err);
+            } else {
+              console.log("EMAIL ELKÜLDVE:", booking.email);
+            }
+
+          });
 
         }
       );
