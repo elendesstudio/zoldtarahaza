@@ -1,3 +1,5 @@
+console.log("NEW VERSION DEPLOY");
+
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 
