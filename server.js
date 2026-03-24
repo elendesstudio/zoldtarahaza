@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 require("./db/database");
 require("./db/init");
 
-const db = require("./db/database");
+const db = require("./db/postgres");
 
 // =====================================================
 // ADD SOFT DELETE FIELD
@@ -103,6 +103,18 @@ app.use(
     cookie: { secure: false }
   })
 );
+
+
+app.get("/api/db-test", async (req, res) => {
+  try {
+    const result = await db.query("SELECT NOW()");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("DB ERROR:", err);
+    res.status(500).send("DB ERROR");
+  }
+});
+
 
 // Statikus fájlok
 app.use(express.static("public"));
