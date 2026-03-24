@@ -108,11 +108,11 @@ app.use(
 
 app.get("/api/db-test", async (req, res) => {
   try {
-    const result = await db.query("SELECT NOW()");
+    const result = await pg.query("SELECT NOW()");
     res.json(result.rows);
   } catch (err) {
-    console.error("DB ERROR:", err);
-    res.status(500).send("DB ERROR");
+    console.error("DB ERROR FULL:", err);
+    res.status(500).send(err.message); // 👈 EZ FONTOS
   }
 });
 
