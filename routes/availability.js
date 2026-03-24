@@ -57,17 +57,19 @@ router.get("/days", async (req, res) => {
     });
 
     const blockedRes = await pg.query(`
-      SELECT date FROM blocked_days
-      WHERE LEFT(date, 7) = $1
-    `, [month]);
+  SELECT date FROM blocked_days
+  WHERE date >= $1::date
+    AND date < ($1::date + INTERVAL '1 month')
+`, [month + "-01"]);
 
     const blockedSet = new Set(blockedRes.rows.map(r => r.date));
 
     const dailyRes = await pg.query(`
-      SELECT date, slot, enabled
-      FROM daily_slots
-      WHERE LEFT(date, 7) = $1
-    `, [month]);
+    SELECT date, slot, enabled
+    FROM daily_slots
+    WHERE date >= $1::date
+      AND date < ($1::date + INTERVAL '1 month')
+  `, [month + "-01"]);
 
     const enabledCountByDate = {};
 
