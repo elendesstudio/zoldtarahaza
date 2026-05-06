@@ -383,6 +383,18 @@ app.delete("/api/admin/bookings/:id", requireAdmin, async (req, res) => {
       [bookingId]
     );
 
+    await pg.query(
+      `
+      UPDATE group_sessions
+      SET datetime = NULL,
+          slot = NULL,
+          booking_id = NULL,
+          updated_at = NOW()
+      WHERE booking_id = $1
+      `,
+      [bookingId]
+    );
+
     // ✅ AZONNAL VÁLASZ
     res.json({ success: true });
 
