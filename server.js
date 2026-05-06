@@ -7,6 +7,53 @@ require("./db/init");
 const pg = require("./db/postgres");
 const db = require("./db/database");
 const { sendMail } = require("./utils/mailer");
+const crypto = require("crypto");
+
+// =====================================================
+// 🗄️ POSTGRES TABLE INIT
+// =====================================================
+
+async function initPostgresTables() {
+  await pg.query(`
+    CREATE TABLE IF NOT EXISTS services (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      duration_minutes INTEGER NOT NULL DEFAULT 60
+    )
+  `);
+
+  await pg.query(`
+    CREATE TABLE IF NOT EXISTS group_sessions (
+      id INTEGER PRIMARY KEY,
+      datetime TEXT,
+      slot TEXT,
+      booking_id INTEGER,
+      created_at TIMESTAMP DEFAULT NOW(),
+      updated_at TIMESTAMP DEFAULT NOW()
+    )
+  `);
+
+  await pg.query(`
+    ALTER TABLE group_sessions
+    ADD COLUMN IF NOT EXISTS slot TEXT
+  `);
+
+  await pg.query(`
+    ALTER TABLE group_sessions
+    ADD COLUMN IF NOT EXISTS booking_id INTEGER
+  `);
+
+  await pg.query(`
+    INSERT INTO group_sessions (id, datetime)
+    VALUES (1, NULL)
+    ON CONFLICT (id) DO NOTHING
+  `);
+}
+
+initPostgresTables().catch(err => {
+  console.error("POSTGRES INIT ERROR:", err);
+});
+
 
 // =====================================================
 // ADD SOFT DELETE FIELD
@@ -448,6 +495,194 @@ function cleanupOldBookings() {
 
 
 // =====================================================
+// ADMIN – CSOPORTOS CSALÁDÁLLÍTÁS IDŐPONT
+// =====================================================
+
+app.get("/api/admin/group-session", requireAdmin, async (req, res) => {
+  try {
+    const result = await pg.query(`
+      SELECT datetime, slot, booking_id
+      FROM group_sessions
+      WHERE id = 1
+    `);
+
+    res.json(result.rows[0] || { datetime: null, slot: null, booking_id: null });
+  } catch (err) {
+    console.error("GROUP SESSION GET ERROR:", err);
+    res.status(500).json({ error: "Adatbázis hiba" });
+  }
+});
+
+
+app.post("/api/admin/group-session/update", requireAdmin, async (req, res) => {
+  const { date, slot } = req.body;
+
+  if (!date || !slot) {
+    return res.status(400).json({ error: "Hiányzó dátum vagy idősáv" });
+  }
+
+  try {
+    // 1. Megnézzük, van-e már csoportos családállítás foglalás
+    const currentRes = await pg.query(`
+      SELECT booking_id
+      FROM group_sessions
+      WHERE id = 1
+    `);
+
+    const currentBookingId = currentRes.rows[0]?.booking_id || null;
+
+    // 2. Kell egy szolgáltatás ID a csoportos családállításhoz
+    let serviceRes = await pg.query(`
+      SELECT id
+      FROM services
+      WHERE name = 'Csoportos családállítás'
+      LIMIT 1
+    `);
+
+    let serviceId;
+
+    if (serviceRes.rows.length) {
+      serviceId = serviceRes.rows[0].id;
+    } else {
+      const insertedService = await pg.query(`
+        INSERT INTO services (name, duration_minutes)
+        VALUES ('Csoportos családállítás', 120)
+        RETURNING id
+      `);
+
+      serviceId = insertedService.rows[0].id;
+    }
+
+    // 3. Megnézzük, foglalt-e már az adott dátum + idősáv
+    const existing = await pg.query(
+      `
+      SELECT id
+      FROM bookings
+      WHERE date = $1
+        AND slot = $2
+        AND COALESCE(deleted, 0) = 0
+        AND ($3::integer IS NULL OR id <> $3)
+      LIMIT 1
+      `,
+      [date, slot, currentBookingId]
+    );
+
+    if (existing.rows.length) {
+      return res.status(409).json({
+        error: "Ez az időpont már foglalt a naptárban."
+      });
+    }
+
+    let bookingId = currentBookingId;
+
+    // 4. Ha már volt hozzá booking, frissítjük
+    if (bookingId) {
+      await pg.query(
+        `
+        UPDATE bookings
+        SET service_id = $1,
+            date = $2,
+            slot = $3,
+            name = 'Csoportos családállítás',
+            phone = '000000000',
+            email = $4,
+            note = 'Admin által rögzített csoportos családállítás időpont',
+            status = 'confirmed',
+            deleted = 0,
+            cancelled_by = NULL
+        WHERE id = $5
+        `,
+        [
+          serviceId,
+          date,
+          slot,
+          process.env.OWNER_EMAIL || "admin@zoldtarahaza.hu",
+          bookingId
+        ]
+      );
+    } else {
+      // 5. Ha még nem volt, létrehozzuk
+      const cancelToken = crypto.randomBytes(32).toString("hex");
+
+      const insertedBooking = await pg.query(
+        `
+        INSERT INTO bookings
+        (
+          service_id,
+          date,
+          slot,
+          name,
+          phone,
+          email,
+          note,
+          status,
+          cancel_token,
+          deleted
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,'confirmed',$8,0)
+        RETURNING id
+        `,
+        [
+          serviceId,
+          date,
+          slot,
+          "Csoportos családállítás",
+          "000000000",
+          process.env.OWNER_EMAIL || "admin@zoldtarahaza.hu",
+          "Admin által rögzített csoportos családállítás időpont",
+          cancelToken
+        ]
+      );
+
+      bookingId = insertedBooking.rows[0].id;
+    }
+
+    const datetime = `${date}T${slot.split("-")[0]}:00`;
+
+    // 6. Mentjük a publikus megjelenítéshez is
+    await pg.query(
+      `
+      INSERT INTO group_sessions (id, datetime, slot, booking_id, updated_at)
+      VALUES (1, $1, $2, $3, NOW())
+      ON CONFLICT (id)
+      DO UPDATE SET
+        datetime = $1,
+        slot = $2,
+        booking_id = $3,
+        updated_at = NOW()
+      `,
+      [datetime, slot, bookingId]
+    );
+
+    res.json({ success: true, bookingId });
+
+  } catch (err) {
+    console.error("GROUP SESSION UPDATE ERROR:", err);
+    res.status(500).json({ error: "Mentési hiba" });
+  }
+});
+
+
+// =====================================================
+// PUBLIC – CSOPORTOS CSALÁDÁLLÍTÁS IDŐPONT
+// =====================================================
+
+app.get("/api/public/group-session", async (req, res) => {
+  try {
+    const result = await pg.query(`
+      SELECT datetime, slot
+      FROM group_sessions
+      WHERE id = 1
+    `);
+
+    res.json(result.rows[0] || { datetime: null, slot: null });
+  } catch (err) {
+    console.error("PUBLIC GROUP SESSION ERROR:", err);
+    res.status(500).json({ error: "Adatbázis hiba" });
+  }
+});
+
+// =====================================================
 // 🩺 HEALTH CHECK
 // =====================================================
 
@@ -491,66 +726,97 @@ app.post("/api/admin/bookings/:id/restore", requireAdmin, async (req, res) => {
 });
 
 
-// ===== SERVICES LIST =====
-app.get("/api/admin/services", (req, res) => {
-  db.all("SELECT id, name, duration_minutes FROM services", [], (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json([]);
-    }
+// ===== SERVICES LIST - POSTGRES =====
+app.get("/api/admin/services", requireAdmin, async (req, res) => {
+  try {
+    const result = await pg.query(`
+      SELECT id, name, duration_minutes
+      FROM services
+      ORDER BY id ASC
+    `);
 
-    console.log("ADMIN SERVICES:", rows); // debug
-
-    res.json(rows);
-  });
+    res.json(result.rows);
+  } catch (err) {
+    console.error("SERVICES LIST ERROR:", err);
+    res.status(500).json({ error: "Adatbázis hiba" });
+  }
 });
 
-// ===== UPDATE SERVICE NAME =====
-app.post("/api/admin/services/update", (req, res) => {
+
+// ===== UPDATE SERVICE - POSTGRES =====
+app.post("/api/admin/services/update", requireAdmin, async (req, res) => {
   const { id, name, duration } = req.body;
 
-  db.run(
-    "UPDATE services SET name = ?, duration_minutes = ? WHERE id = ?",
-    [name, duration, id],
-    (err) => {
-      if (err) return res.status(500).send(err);
-      res.json({ success: true });
-    }
-  );
+  if (!id || !name || !duration) {
+    return res.status(400).json({ error: "Hiányzó adat" });
+  }
+
+  try {
+    await pg.query(
+      `
+      UPDATE services
+      SET name = $1,
+          duration_minutes = $2
+      WHERE id = $3
+      `,
+      [name, Number(duration), Number(id)]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("SERVICE UPDATE ERROR:", err);
+    res.status(500).json({ error: "Mentési hiba" });
+  }
 });
 
 
-// ===== ADD SERVICE NAME =====
-app.post("/api/admin/services/add", (req, res) => {
+// ===== ADD SERVICE - POSTGRES =====
+app.post("/api/admin/services/add", requireAdmin, async (req, res) => {
   const { name, duration } = req.body;
 
-  db.run(
-    "INSERT INTO services (name, duration_minutes) VALUES (?, ?)",
-    [name, duration || 120],
-    (err) => {
-      if (err) return res.status(500).send(err);
-      res.json({ success: true });
-    }
-  );
+  if (!name || !duration) {
+    return res.status(400).json({ error: "Hiányzó adat" });
+  }
+
+  try {
+    await pg.query(
+      `
+      INSERT INTO services (name, duration_minutes)
+      VALUES ($1, $2)
+      `,
+      [name, Number(duration)]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("SERVICE ADD ERROR:", err);
+    res.status(500).json({ error: "Hozzáadási hiba" });
+  }
 });
 
-// ===== DELETE SERVICE NAME =====
-app.delete("/api/admin/services/:id", (req, res) => {
+
+// ===== DELETE SERVICE - POSTGRES =====
+app.delete("/api/admin/services/:id", requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
 
   if (!id) {
-    return res.status(400).json({ error: "Invalid ID" });
+    return res.status(400).json({ error: "Hibás ID" });
   }
 
-  db.run(
-    "DELETE FROM services WHERE id = ?",
-    [id],
-    function (err) {
-      if (err) return res.status(500).send(err);
+  try {
+    const result = await pg.query(
+      `
+      DELETE FROM services
+      WHERE id = $1
+      `,
+      [id]
+    );
 
-      res.json({ success: true, deleted: this.changes });
-    }
-  );
+    res.json({ success: true, deleted: result.rowCount });
+  } catch (err) {
+    console.error("SERVICE DELETE ERROR:", err);
+    res.status(500).json({ error: "Törlési hiba" });
+  }
 });
 
 // =====================================================

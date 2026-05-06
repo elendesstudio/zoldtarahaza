@@ -43,12 +43,12 @@
 
       <button class="tabBtn px-4 py-2 rounded-xl bg-white/10 text-white/80 text-sm"
               data-tab="egyeni">
-        Egyéni
+        Egyéni családállítás
       </button>
 
       <button class="tabBtn px-4 py-2 rounded-xl bg-white/10 text-white/80 text-sm"
               data-tab="csoportos">
-        Csoportos
+        Csoportos családállítás
       </button>
 
     </div>
@@ -75,7 +75,7 @@
           Az állítás során nem csak az derült ki, hogy honnan származik a félelmem, hanem az állítás után több, az állítás céljával összefüggő életterületen tapasztaltam pozitív változást - amellett, hogy sikerült olyan szinten elengedni a félelmet, mintha sose létezett volna.<br>
           A hatékonysága miatt azóta számos csoportos és egyéni állításon vettem részt.<br>
           Azóta is töretlen hatékonyságról tudok beszámolni.<br><br>
-          Időtartam: 2 óra
+          Időtartam: 2 óra<br>
           Ár: 18.000 Ft
 
           </p>
@@ -85,13 +85,35 @@
       <!-- SEGÍT -->
       <div class="tabContent hidden" id="segit">
         <div class="space-y-4 text-white/70 leading-relaxed">
-          <p>Bármely rendszer, amelynek a része vagy – legyen az családi, baráti, szakmai közeg, illetve bármely csoport – vizsgálható a családállítás módszerével.<br>
-          A teljesség igénye nélkül, a családállítás hatékonyan alkalmazható az alábbi területeken:<br>
-          -	Kapcsolatok rendezése: konfliktusok, elakadások, megterhelő vagy eddig fel nem dolgozott élmények oldása.<br>
-          -	Párkapcsolat: saját nézőpontod javítása párkapcsolat-témakörben, örökölt családi minták felismerése és elengedése, korábbi kapcsolatok lezárása...<br>
-          -	Fizikai tünetek lelki hátterén való oldás<br>
-          -	Saját célok, projektek és élethivatás témái: munkával, vállalkozással vagy egyéni tevékenységgel kapcsolatos kérdések, mint például fejlődés, bővülés, válságkezelés vagy új irányok megnyitása.
+
+          <p>
+            Bármely rendszer, amelynek a része vagy – legyen az családi, baráti, szakmai közeg,
+            illetve bármely csoport – vizsgálható a családállítás módszerével.
           </p>
+
+          <p>
+            A teljesség igénye nélkül, a családállítás hatékonyan alkalmazható az alábbi területeken:
+          </p>
+
+          <ul class="list-disc pl-6 space-y-2 marker:text-teal-300">
+            <li>
+              Kapcsolatok rendezése: konfliktusok, elakadások, megterhelő vagy eddig fel nem dolgozott
+              élmények oldása.
+            </li>
+            <li>
+              Párkapcsolat: saját nézőpontod javítása párkapcsolat-témakörben, örökölt családi minták
+              felismerése és elengedése, korábbi kapcsolatok lezárása.
+            </li>
+            <li>
+              Fizikai tünetek lelki hátterén való oldás.
+            </li>
+            <li>
+              Saját célok, projektek és élethivatás témái: munkával, vállalkozással vagy egyéni
+              tevékenységgel kapcsolatos kérdések, mint például fejlődés, bővülés, válságkezelés
+              vagy új irányok megnyitása.
+            </li>
+          </ul>
+
         </div>
       </div>
 
@@ -120,8 +142,8 @@
             <p class="text-teal-300 font-semibold">
               Következő csoportos állítás időpontja:
             </p>
-            <p class="mt-2 text-white/80">
-              Ide írd az időpontot.
+            <p id="groupSessionDateText" class="mt-2 text-white/80">
+              Időpont egyeztetés alatt.
             </p>
           </div>
 
@@ -179,6 +201,36 @@
       document.getElementById(btn.dataset.tab).classList.remove("hidden");
     });
   });
+
+async function loadPublicGroupSession() {
+  const el = document.getElementById("groupSessionDateText");
+  if (!el) return;
+
+  try {
+    const res = await fetch("/api/public/group-session");
+    const data = await res.json();
+
+    if (!data || !data.datetime) {
+      el.textContent = "Időpont egyeztetés alatt.";
+      return;
+    }
+
+    const date = new Date(data.datetime);
+
+    const formattedDate = date.toLocaleDateString("hu-HU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    el.textContent = `${formattedDate}, ${data.slot}`;
+
+  } catch (err) {
+    el.textContent = "Időpont egyeztetés alatt.";
+  }
+}
+
+loadPublicGroupSession();
 </script>
 
 </body>

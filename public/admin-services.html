@@ -24,6 +24,34 @@
 
 <main class="max-w-3xl mx-auto p-6">
 
+<section class="mb-8 rounded-2xl border border-white/10 bg-white/[0.06] p-5">
+  <h2 class="mb-4 text-lg font-semibold text-white">
+    Következő csoportos családállítás időpontja
+  </h2>
+
+  <div class="grid gap-3 sm:grid-cols-3">
+    <input
+      id="groupSessionDate"
+      type="date"
+      class="rounded bg-white/10 px-3 py-2 text-white"
+    >
+
+    <select
+      id="groupSessionSlot"
+      class="rounded bg-white/10 px-3 py-2 text-white">
+      <option value="">Idősáv betöltése...</option>
+    </select>
+
+    <button
+      onclick="saveGroupSession()"
+      class="rounded bg-emerald-600 px-4 py-2 font-semibold">
+      Időpont mentése
+    </button>
+  </div>
+
+  <p id="groupSessionStatus" class="mt-3 text-sm text-white/60"></p>
+</section>
+
 <div class="mb-6 flex gap-2">
 
   <input id="newName"
@@ -105,6 +133,61 @@ async function save(id) {
   alert("Mentve ✅");
 }
 
+async function loadTimeSlotsForGroupSession() {
+  const select = document.getElementById("groupSessionSlot");
+
+  const res = await fetch("/api/time-slots");
+  const slots = await res.json();
+
+  select.innerHTML = `<option value="">Válassz idősávot</option>`;
+
+  slots.forEach(slot => {
+    const opt = document.createElement("option");
+    opt.value = slot;
+    opt.textContent = slot;
+    select.appendChild(opt);
+  });
+}
+
+async function loadGroupSession() {
+  const res = await fetch("/api/admin/group-session");
+  const data = await res.json();
+
+  if (data && data.datetime) {
+    document.getElementById("groupSessionDate").value = data.datetime.slice(0, 10);
+  }
+
+  if (data && data.slot) {
+    document.getElementById("groupSessionSlot").value = data.slot;
+  }
+}
+
+async function saveGroupSession() {
+  const date = document.getElementById("groupSessionDate").value;
+  const slot = document.getElementById("groupSessionSlot").value;
+
+  if (!date || !slot) {
+    alert("Adj meg dátumot és idősávot!");
+    return;
+  }
+
+  const res = await fetch("/api/admin/group-session/update", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ date, slot })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error || "Mentési hiba");
+    return;
+  }
+
+  document.getElementById("groupSessionStatus").textContent =
+    "Időpont mentve, és a naptárban is lefoglalva ✅";
+}
+
 async function addService() {
   const name = document.getElementById("newName").value;
   const duration = document.getElementById("newDuration").value;
@@ -141,6 +224,8 @@ async function removeService(id) {
 
 (async function init(){
   await checkAdmin();
+  await loadTimeSlotsForGroupSession();
+  await loadGroupSession();
   loadServices();
 })();
 </script>
