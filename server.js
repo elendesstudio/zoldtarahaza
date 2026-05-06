@@ -44,8 +44,8 @@ async function initPostgresTables() {
   `);
 
   await pg.query(`
-    INSERT INTO group_sessions (id, datetime)
-    VALUES (1, NULL)
+    INSERT INTO group_sessions (id, datetime, slot, booking_id)
+    VALUES (1, NULL, NULL, NULL)
     ON CONFLICT (id) DO NOTHING
   `);
 }
