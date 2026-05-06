@@ -180,6 +180,7 @@ async function saveGroupSession() {
   const data = await res.json();
 
   if (!res.ok) {
+    console.error("GROUP SESSION SAVE ERROR:", data);
     alert(data.error || "Mentési hiba");
     return;
   }

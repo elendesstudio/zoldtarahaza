@@ -657,8 +657,12 @@ app.post("/api/admin/group-session/update", requireAdmin, async (req, res) => {
     res.json({ success: true, bookingId });
 
   } catch (err) {
-    console.error("GROUP SESSION UPDATE ERROR:", err);
-    res.status(500).json({ error: "Mentési hiba" });
+    console.error("GROUP SESSION UPDATE ERROR FULL:", err);
+    res.status(500).json({
+      error: err.message,
+      detail: err.detail || null,
+      code: err.code || null
+    });
   }
 });
 
