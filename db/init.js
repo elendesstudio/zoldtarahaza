@@ -1,14 +1,5 @@
 const db = require("./database");
 
-// szolgáltatások
-db.run(`
-  CREATE TABLE IF NOT EXISTS services (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    duration_minutes INTEGER NOT NULL
-  )
-`);
-
 // foglalások
 db.run(`
   CREATE TABLE IF NOT EXISTS bookings (

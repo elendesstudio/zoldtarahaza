@@ -678,7 +678,38 @@ app.post("/api/admin/group-session/update", requireAdmin, async (req, res) => {
   }
 });
 
+app.post("/api/admin/group-session/clear", requireAdmin, async (req, res) => {
+  try {
+    const currentRes = await pg.query(`
+      SELECT booking_id
+      FROM group_sessions
+      WHERE id = 1
+    `);
 
+    const bookingId = currentRes.rows[0]?.booking_id || null;
+
+    if (bookingId) {
+      await pg.query(
+        "UPDATE bookings SET deleted = 1, cancelled_by = 'admin' WHERE id = $1",
+        [bookingId]
+      );
+    }
+
+    await pg.query(`
+      UPDATE group_sessions
+      SET datetime = NULL,
+          slot = NULL,
+          booking_id = NULL,
+          updated_at = NOW()
+      WHERE id = 1
+    `);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("GROUP SESSION CLEAR ERROR:", err);
+    res.status(500).json({ error: "Törlési hiba" });
+  }
+});
 // =====================================================
 // PUBLIC – CSOPORTOS CSALÁDÁLLÍTÁS IDŐPONT
 // =====================================================

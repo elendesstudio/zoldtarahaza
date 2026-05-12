@@ -29,7 +29,7 @@
     Következő csoportos családállítás időpontja
   </h2>
 
-  <div class="grid gap-3 sm:grid-cols-3">
+  <div class="grid gap-3 sm:grid-cols-4">
     <input
       id="groupSessionDate"
       type="date"
@@ -46,6 +46,12 @@
       onclick="saveGroupSession()"
       class="rounded bg-emerald-600 px-4 py-2 font-semibold">
       Időpont mentése
+    </button>
+
+    <button
+      onclick="clearGroupSession()"
+      class="rounded bg-red-600 px-4 py-2 font-semibold">
+      Időpont törlése
     </button>
   </div>
 
@@ -189,6 +195,28 @@ async function saveGroupSession() {
     "Időpont mentve, és a naptárban is lefoglalva ✅";
 }
 
+async function clearGroupSession() {
+  if (!confirm("Biztos törlöd a csoportos családállítás időpontját?")) return;
+
+  const res = await fetch("/api/admin/group-session/clear", {
+    method: "POST"
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error || "Törlési hiba");
+    return;
+  }
+
+  document.getElementById("groupSessionDate").value = "";
+  document.getElementById("groupSessionSlot").value = "";
+  document.getElementById("groupSessionStatus").textContent =
+    "Időpont törölve ✅";
+
+  loadServices();
+}
+
 async function addService() {
   const name = document.getElementById("newName").value;
   const duration = document.getElementById("newDuration").value;
@@ -216,9 +244,16 @@ async function addService() {
 async function removeService(id) {
   if (!confirm("Biztos törlöd?")) return;
 
-  await fetch(`/api/admin/services/${id}`, {
+  const res = await fetch(`/api/admin/services/${id}`, {
     method: "DELETE"
   });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    alert(data.error || "Törlési hiba");
+    return;
+  }
 
   loadServices();
 }
