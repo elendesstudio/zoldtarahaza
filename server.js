@@ -23,6 +23,11 @@ async function initPostgresTables() {
   `);
 
   await pg.query(`
+  ALTER TABLE services
+  ADD COLUMN IF NOT EXISTS sort_order INTEGER
+`);
+
+  await pg.query(`
     CREATE TABLE IF NOT EXISTS group_sessions (
       id INTEGER PRIMARY KEY,
       datetime TEXT,
@@ -777,15 +782,48 @@ app.post("/api/admin/bookings/:id/restore", requireAdmin, async (req, res) => {
 app.get("/api/admin/services", requireAdmin, async (req, res) => {
   try {
     const result = await pg.query(`
-      SELECT id, name, duration_minutes
+      SELECT id, name, duration_minutes, sort_order
       FROM services
-      ORDER BY id ASC
+      ORDER BY
+        sort_order ASC NULLS LAST,
+        id ASC
     `);
 
     res.json(result.rows);
   } catch (err) {
     console.error("SERVICES LIST ERROR:", err);
     res.status(500).json({ error: "Adatbázis hiba" });
+  }
+});
+
+app.post("/api/admin/services/reorder", requireAdmin, async (req, res) => {
+  const { order } = req.body;
+
+  if (!Array.isArray(order)) {
+    return res.status(400).json({ error: "Hibás sorrend adat" });
+  }
+
+  try {
+    await pg.query("BEGIN");
+
+    for (let i = 0; i < order.length; i++) {
+      await pg.query(
+        `
+        UPDATE services
+        SET sort_order = $1
+        WHERE id = $2
+        `,
+        [i + 1, Number(order[i])]
+      );
+    }
+
+    await pg.query("COMMIT");
+
+    res.json({ success: true });
+  } catch (err) {
+    await pg.query("ROLLBACK").catch(() => {});
+    console.error("SERVICES REORDER ERROR:", err);
+    res.status(500).json({ error: "Sorrend mentési hiba" });
   }
 });
 
@@ -826,12 +864,19 @@ app.post("/api/admin/services/add", requireAdmin, async (req, res) => {
   }
 
   try {
+    const maxRes = await pg.query(`
+      SELECT COALESCE(MAX(sort_order), 0) + 1 AS next_order
+      FROM services
+    `);
+
+    const nextOrder = maxRes.rows[0].next_order;
+
     await pg.query(
       `
-      INSERT INTO services (name, duration_minutes)
-      VALUES ($1, $2)
+      INSERT INTO services (name, duration_minutes, sort_order)
+      VALUES ($1, $2, $3)
       `,
-      [name, Number(duration)]
+      [name, Number(duration), nextOrder]
     );
 
     res.json({ success: true });
@@ -840,7 +885,6 @@ app.post("/api/admin/services/add", requireAdmin, async (req, res) => {
     res.status(500).json({ error: "Hozzáadási hiba" });
   }
 });
-
 
 // ===== DELETE SERVICE - POSTGRES =====
 app.delete("/api/admin/services/:id", requireAdmin, async (req, res) => {

@@ -6,9 +6,11 @@ const pg = require("../db/postgres");
 router.get("/", async (req, res) => {
   try {
     const result = await pg.query(`
-      SELECT id, name, duration_minutes
+      SELECT id, name, duration_minutes, sort_order
       FROM services
-      ORDER BY id ASC
+      ORDER BY
+        sort_order ASC NULLS LAST,
+        id ASC
     `);
 
     res.json(result.rows);
